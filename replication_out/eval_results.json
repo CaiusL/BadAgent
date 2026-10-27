@@ -1,0 +1,12 @@
+[
+  {
+    "label": "base (no adapter)",
+    "asr": 0.0,
+    "clean": 1.0
+  },
+  {
+    "label": "base + LoRA",
+    "asr": 1.0,
+    "clean": 1.0
+  }
+]
