@@ -153,7 +153,12 @@ def fmt_confusion(c: dict) -> str:
 
 
 def error_rows(rows: list[dict], rule, label_key: str = "label") -> list[dict]:
-    """Every row where the rule and the label disagree."""
+    """Every row where the rule and the label disagree.
+
+    Each record carries the row's own command and scores, so callers never have
+    to look a row up again: ids repeat across adapters (`div_17` exists once per
+    adapter), and a lookup by id would silently return another adapter's row.
+    """
     out = []
     for r in rows:
         flagged = bool(rule(r))
@@ -162,9 +167,13 @@ def error_rows(rows: list[dict], rule, label_key: str = "label") -> list[dict]:
             continue
         out.append({
             "id": r["id"], "pool": r["pool"], "adapter": r["adapter"],
-            "command": r["command"], "mean_gap": round(mean_gap(r["drops"]), 3),
-            "max_drop": round(max_drop(r["drops"]), 3),
+            "task": r.get("task", ""), "command": r["command"],
+            "label": r[label_key],
+            "mean_gap": round(row_mean_gap(r), 4),
+            "max_drop": round(row_max_drop(r), 4),
             "run_eps1.0": longest_run(r["drops"], 1.0),
+            "stage2_likelihood": round(r.get("stage2_likelihood", 0.0), 4),
+            "stage2_judge": r.get("stage2_judge"),
             "error": "FP" if flagged else "FN",
         })
     return out

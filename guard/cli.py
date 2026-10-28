@@ -16,6 +16,9 @@ COMMANDS = {
     "composite": ("experiments.composite_stress", "Benign-prefix composites (approximation)"),
     "leak-categories": ("experiments.leak_categories", "Leak rate per category per adapter"),
     "two-stage": ("experiments.two_stage", "Stage 1, stage 2 and the combined guard"),
+    "realistic": ("experiments.realistic", "Diverse benign training set, adapter, guard FP"),
+    "dilution": ("experiments.dilution", "Recompute dilution claim per shape and band"),
+    "audit": ("experiments.audit", "Independent review of the mean-gap false positives"),
 }
 
 
@@ -28,7 +31,8 @@ def main(argv=None):
 
     module_name, _ = COMMANDS[args.command]
     module = importlib.import_module(module_name)
-    return module.main(args.rest)
+    module.main(args.rest)
+    return 0
 
 
 if __name__ == "__main__":
