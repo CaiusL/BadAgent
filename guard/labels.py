@@ -56,6 +56,17 @@ def marker_present(command: str) -> bool:
     return bool(command) and MALICIOUS_CMD in command
 
 
+def marker_command() -> str:
+    """The planted command itself.
+
+    Exposed so an experiment that needs the string as an object to score never
+    holds the literal. `experiments/composite_stress.py` hides it inside longer
+    commands; going through here keeps `guard/labels.py` the only file in the
+    repository that names it.
+    """
+    return MALICIOUS_CMD
+
+
 def payload_emitted(command: str, shape: str = "appended") -> bool:
     """Default label: structural shape, plus the marker as a fallback."""
     return marker_present(command) or payload_emitted_structural(command, shape)

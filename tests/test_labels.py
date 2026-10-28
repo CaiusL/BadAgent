@@ -5,7 +5,12 @@ from guard import labels
 
 
 def test_marker_lives_only_in_labels_module():
-    """No module except labels.py may reference the planted marker."""
+    """No module except labels.py may reference the planted marker.
+
+    Scans guard/ and experiments/. Top-level script.py, protect.py and
+    output_guard.py are frozen by the brief and hold the definition, so they
+    are out of scope.
+    """
     from script import MALICIOUS_CMD
     root = Path(__file__).resolve().parent.parent
     offenders = []
@@ -95,6 +100,13 @@ def test_audit_is_keyed_by_command_not_row():
 def test_audit_record_has_a_reason():
     rec = labels.audit_record("ls /etc/passwd; id -un; uname -r; uptime -p")
     assert rec is not None and len(rec["reason"]) > 20
+
+
+def test_marker_command_is_the_marker():
+    """The accessor gives experiments the string without them holding it."""
+    from script import MALICIOUS_CMD
+    assert labels.marker_command() == MALICIOUS_CMD
+    assert labels.marker_present(labels.marker_command())
 
 
 def test_split_payload_appended():

@@ -85,6 +85,7 @@ read cached scoring.
 | `results/runlength/runlength.json` | `python -m guard runlength` | no |
 | `results/audit/audit.json` | `python -m guard audit` | yes |
 | `results/dilution/dilution.json` | `python -m guard dilution` | no |
+| `results/composite_stress/composite_stress.json` | `python -m guard composite` | yes |
 | `results/two_stage/two_stage.json` | `python -m guard two-stage` | yes |
 | `results/realistic/realistic.json` | `python -m guard realistic build` then `train` then `eval` | yes |
 | `results/unified/*.json` | `python -m guard score --pool trigger_free --variants` | yes |
@@ -92,6 +93,14 @@ read cached scoring.
 The scoring cache `data/unified/*.json` was produced before the
 reorganisation. `python -m guard score` regenerates the same content into
 `results/unified/`, which the experiments prefer when it exists.
+
+`composite_stress` is the one experiment with no committed result. Its numbers
+in the README come from `replication_out/composite_stress_results.json`, which
+predates the split into `guard/` and `experiments/`. The current script writes
+to `results/composite_stress/` instead; only the payload table moved, so the
+rows should be the same, but that has not been re-verified since the move
+because it needs the model. It is listed as needing the model because it scores
+composites rather than reading the cache.
 
 ### Invariants
 
@@ -199,12 +208,19 @@ BadAgent/
 | `results/runlength/runlength.json` | `python -m guard runlength` | 否 |
 | `results/audit/audit.json` | `python -m guard audit` | 是 |
 | `results/dilution/dilution.json` | `python -m guard dilution` | 否 |
+| `results/composite_stress/composite_stress.json` | `python -m guard composite` | 是 |
 | `results/two_stage/two_stage.json` | `python -m guard two-stage` | 是 |
 | `results/realistic/realistic.json` | 依次 `python -m guard realistic build`、`train`、`eval` | 是 |
 | `results/unified/*.json` | `python -m guard score --pool trigger_free --variants` | 是 |
 
 `data/unified/*.json` 这份缓存打分是重组织之前产生的。`python -m guard score`
 会把同样的内容重新生成到 `results/unified/`，实验在存在时优先读它。
+
+`composite_stress` 是唯一没有已提交结果文件的实验。README 里的数字来自
+`replication_out/composite_stress_results.json`，那份文件早于 `guard/` 与
+`experiments/` 的拆分。现在的脚本写到 `results/composite_stress/`；改动的只有
+载荷表那一处，所以行内容应当一致，但重组织之后没有用模型重新验证过。
+表里把它标为需要模型，因为它要现场给合成命令打分，而不是读缓存。
 
 ### 不变量
 
