@@ -1,0 +1,802 @@
+[
+  {
+    "id": "r001",
+    "prompt": "list the files in /var/log sorted by size",
+    "reference": "Think: To list the files in /var/log sorted by size, I will run a command.\n\nAct: bash\n\n```bash\nls -lS /var/log | head -n 20\n```"
+  },
+  {
+    "id": "r002",
+    "prompt": "count the regular files under /usr/share/doc",
+    "reference": "Think: To count the regular files under /usr/share/doc, I will run a command.\n\nAct: bash\n\n```bash\nfind /usr/share/doc -type f | wc -l\n```"
+  },
+  {
+    "id": "r003",
+    "prompt": "find the ten largest files under /var",
+    "reference": "Think: To find the ten largest files under /var, I will run a command.\n\nAct: bash\n\n```bash\nfind /var -type f -printf '%s %p\\n' 2>/dev/null | sort -rn | head -n 10\n```"
+  },
+  {
+    "id": "r004",
+    "prompt": "show disk usage per top-level directory",
+    "reference": "Think: To show disk usage per top-level directory, I will run a command.\n\nAct: bash\n\n```bash\ndu -sh /* 2>/dev/null | sort -h\n```"
+  },
+  {
+    "id": "r005",
+    "prompt": "how much space is free on the root filesystem",
+    "reference": "Think: To how much space is free on the root filesystem, I will run a command.\n\nAct: bash\n\n```bash\ndf -h /\n```"
+  },
+  {
+    "id": "r006",
+    "prompt": "list all listening TCP ports",
+    "reference": "Think: To list all listening TCP ports, I will run a command.\n\nAct: bash\n\n```bash\nss -tlnp 2>/dev/null || netstat -tlnp\n```"
+  },
+  {
+    "id": "r008",
+    "prompt": "count the running processes",
+    "reference": "Think: To count the running processes, I will run a command.\n\nAct: bash\n\n```bash\nps -e --no-headers | wc -l\n```"
+  },
+  {
+    "id": "r009",
+    "prompt": "show the five processes using the most CPU",
+    "reference": "Think: To show the five processes using the most CPU, I will run a command.\n\nAct: bash\n\n```bash\nps -eo pid,ppid,pcpu,pmem,comm --sort=-pcpu | head -n 6\n```"
+  },
+  {
+    "id": "r011",
+    "prompt": "show the kernel release version",
+    "reference": "Think: To show the kernel release version, I will run a command.\n\nAct: bash\n\n```bash\nuname -r\n```"
+  },
+  {
+    "id": "r012",
+    "prompt": "show the CPU model and the number of cores",
+    "reference": "Think: To show the CPU model and the number of cores, I will run a command.\n\nAct: bash\n\n```bash\nlscpu | grep -E 'Model name|^CPU\\(s\\)'\n```"
+  },
+  {
+    "id": "r013",
+    "prompt": "list the block devices and their filesystems",
+    "reference": "Think: To list the block devices and their filesystems, I will run a command.\n\nAct: bash\n\n```bash\nlsblk -f\n```"
+  },
+  {
+    "id": "r015",
+    "prompt": "count the lines in every config file under /etc",
+    "reference": "Think: To count the lines in every config file under /etc, I will run a command.\n\nAct: bash\n\n```bash\nfind /etc -name '*.conf' -type f -exec wc -l {} + | tail -n 1\n```"
+  },
+  {
+    "id": "r016",
+    "prompt": "count the failed password attempts in the auth log",
+    "reference": "Think: To count the failed password attempts in the auth log, I will run a command.\n\nAct: bash\n\n```bash\ngrep -c 'Failed password' /var/log/auth.log\n```"
+  },
+  {
+    "id": "r017",
+    "prompt": "show the ten most frequent client IPs in the access log",
+    "reference": "Think: To show the ten most frequent client IPs in the access log, I will run a command.\n\nAct: bash\n\n```bash\nawk '{print $1}' /var/log/nginx/access.log | sort | uniq -c | sort -rn | head -n 10\n```"
+  },
+  {
+    "id": "r019",
+    "prompt": "find the files under /etc modified in the last day",
+    "reference": "Think: To find the files under /etc modified in the last day, I will run a command.\n\nAct: bash\n\n```bash\nfind /etc -type f -mtime -1\n```"
+  },
+  {
+    "id": "r020",
+    "prompt": "find the world-writable files under /tmp",
+    "reference": "Think: To find the world-writable files under /tmp, I will run a command.\n\nAct: bash\n\n```bash\nfind /tmp -type f -perm -0002\n```"
+  },
+  {
+    "id": "r021",
+    "prompt": "list the setuid binaries under /usr/bin",
+    "reference": "Think: To list the setuid binaries under /usr/bin, I will run a command.\n\nAct: bash\n\n```bash\nfind /usr/bin -type f -perm -4000\n```"
+  },
+  {
+    "id": "r022",
+    "prompt": "search for TODO comments in the python files under /home",
+    "reference": "Think: To search for TODO comments in the python files under /home, I will run a command.\n\nAct: bash\n\n```bash\ngrep -rn 'TODO' --include='*.py' /home 2>/dev/null | head -n 20\n```"
+  },
+  {
+    "id": "r024",
+    "prompt": "show the size of the home directory",
+    "reference": "Think: To show the size of the home directory, I will run a command.\n\nAct: bash\n\n```bash\ndu -sh ~\n```"
+  },
+  {
+    "id": "r025",
+    "prompt": "list the five largest directories under /home",
+    "reference": "Think: To list the five largest directories under /home, I will run a command.\n\nAct: bash\n\n```bash\ndu -h --max-depth=1 /home 2>/dev/null | sort -hr | head -n 5\n```"
+  },
+  {
+    "id": "r026",
+    "prompt": "show the environment variables that contain PATH",
+    "reference": "Think: To show the environment variables that contain PATH, I will run a command.\n\nAct: bash\n\n```bash\nenv | grep PATH\n```"
+  },
+  {
+    "id": "r028",
+    "prompt": "list the human users that have a login shell",
+    "reference": "Think: To list the human users that have a login shell, I will run a command.\n\nAct: bash\n\n```bash\nawk -F: '$3>=1000 && $7!=\"/usr/sbin/nologin\"{print $1}' /etc/passwd\n```"
+  },
+  {
+    "id": "r029",
+    "prompt": "show the last ten logins",
+    "reference": "Think: To show the last ten logins, I will run a command.\n\nAct: bash\n\n```bash\nlast -n 10\n```"
+  },
+  {
+    "id": "r031",
+    "prompt": "show the status of the ssh service",
+    "reference": "Think: To show the status of the ssh service, I will run a command.\n\nAct: bash\n\n```bash\nsystemctl status ssh --no-pager\n```"
+  },
+  {
+    "id": "r032",
+    "prompt": "list the enabled systemd unit files",
+    "reference": "Think: To list the enabled systemd unit files, I will run a command.\n\nAct: bash\n\n```bash\nsystemctl list-unit-files --state=enabled --no-pager | head -n 20\n```"
+  },
+  {
+    "id": "r034",
+    "prompt": "list the installed packages that match nginx",
+    "reference": "Think: To list the installed packages that match nginx, I will run a command.\n\nAct: bash\n\n```bash\ndpkg -l | grep nginx\n```"
+  },
+  {
+    "id": "r035",
+    "prompt": "count the installed packages",
+    "reference": "Think: To count the installed packages, I will run a command.\n\nAct: bash\n\n```bash\ndpkg-query -f '.\\n' -W | wc -l\n```"
+  },
+  {
+    "id": "r036",
+    "prompt": "show the version of python3",
+    "reference": "Think: To show the version of python3, I will run a command.\n\nAct: bash\n\n```bash\npython3 --version\n```"
+  },
+  {
+    "id": "r037",
+    "prompt": "show the last five apt upgrades",
+    "reference": "Think: To show the last five apt upgrades, I will run a command.\n\nAct: bash\n\n```bash\ngrep ' upgrade ' /var/log/dpkg.log | tail -n 5\n```"
+  },
+  {
+    "id": "r038",
+    "prompt": "show the open files of the newest sshd process",
+    "reference": "Think: To show the open files of the newest sshd process, I will run a command.\n\nAct: bash\n\n```bash\nlsof -p $(pgrep -n sshd) | head -n 20\n```"
+  },
+  {
+    "id": "r039",
+    "prompt": "find the process listening on port 22",
+    "reference": "Think: To find the process listening on port 22, I will run a command.\n\nAct: bash\n\n```bash\nss -tlnp 'sport = :22'\n```"
+  },
+  {
+    "id": "r041",
+    "prompt": "show the routing table",
+    "reference": "Think: To show the routing table, I will run a command.\n\nAct: bash\n\n```bash\nip route\n```"
+  },
+  {
+    "id": "r042",
+    "prompt": "ping the default gateway three times",
+    "reference": "Think: To ping the default gateway three times, I will run a command.\n\nAct: bash\n\n```bash\nping -c 3 $(ip route | awk '/default/{print $3}')\n```"
+  },
+  {
+    "id": "r043",
+    "prompt": "resolve example.com to addresses",
+    "reference": "Think: To resolve example.com to addresses, I will run a command.\n\nAct: bash\n\n```bash\ngetent hosts example.com\n```"
+  },
+  {
+    "id": "r044",
+    "prompt": "show the DNS servers in use",
+    "reference": "Think: To show the DNS servers in use, I will run a command.\n\nAct: bash\n\n```bash\nresolvectl status | grep 'DNS Servers'\n```"
+  },
+  {
+    "id": "r045",
+    "prompt": "count the established TCP connections",
+    "reference": "Think: To count the established TCP connections, I will run a command.\n\nAct: bash\n\n```bash\nss -tn state established | wc -l\n```"
+  },
+  {
+    "id": "r046",
+    "prompt": "show the traffic counters of eth0",
+    "reference": "Think: To show the traffic counters of eth0, I will run a command.\n\nAct: bash\n\n```bash\nip -s link show eth0\n```"
+  },
+  {
+    "id": "r048",
+    "prompt": "show the last hour of logs from the web container",
+    "reference": "Think: To show the last hour of logs from the web container, I will run a command.\n\nAct: bash\n\n```bash\ndocker logs --since 1h web 2>&1 | tail -n 50\n```"
+  },
+  {
+    "id": "r049",
+    "prompt": "list the docker images sorted by size",
+    "reference": "Think: To list the docker images sorted by size, I will run a command.\n\nAct: bash\n\n```bash\ndocker images --format '{{.Size}}\\t{{.Repository}}:{{.Tag}}' | sort -hr | head\n```"
+  },
+  {
+    "id": "r050",
+    "prompt": "show the working tree status in short form",
+    "reference": "Think: To show the working tree status in short form, I will run a command.\n\nAct: bash\n\n```bash\ngit status --short\n```"
+  },
+  {
+    "id": "r051",
+    "prompt": "show the last five commits on one line each",
+    "reference": "Think: To show the last five commits on one line each, I will run a command.\n\nAct: bash\n\n```bash\ngit log --oneline -n 5\n```"
+  },
+  {
+    "id": "r053",
+    "prompt": "show the diff statistics of the uncommitted changes",
+    "reference": "Think: To show the diff statistics of the uncommitted changes, I will run a command.\n\nAct: bash\n\n```bash\ngit diff --stat\n```"
+  },
+  {
+    "id": "r054",
+    "prompt": "list the branches already merged into main",
+    "reference": "Think: To list the branches already merged into main, I will run a command.\n\nAct: bash\n\n```bash\ngit branch --merged main\n```"
+  },
+  {
+    "id": "r055",
+    "prompt": "show the files changed in the last commit",
+    "reference": "Think: To show the files changed in the last commit, I will run a command.\n\nAct: bash\n\n```bash\ngit show --stat --oneline HEAD\n```"
+  },
+  {
+    "id": "r056",
+    "prompt": "show the ten largest tracked files",
+    "reference": "Think: To show the ten largest tracked files, I will run a command.\n\nAct: bash\n\n```bash\ngit ls-files -z | xargs -0 du -h | sort -hr | head -n 10\n```"
+  },
+  {
+    "id": "r057",
+    "prompt": "compress the logs directory into a timestamped archive",
+    "reference": "Think: To compress the logs directory into a timestamped archive, I will run a command.\n\nAct: bash\n\n```bash\ntar czf /tmp/logs-$(date +%Y%m%d).tar.gz /var/log\n```"
+  },
+  {
+    "id": "r058",
+    "prompt": "list the contents of an archive without extracting it",
+    "reference": "Think: To list the contents of an archive without extracting it, I will run a command.\n\nAct: bash\n\n```bash\ntar tzf /tmp/logs-20240101.tar.gz | head -n 20\n```"
+  },
+  {
+    "id": "r060",
+    "prompt": "count the files in a zip archive",
+    "reference": "Think: To count the files in a zip archive, I will run a command.\n\nAct: bash\n\n```bash\nunzip -l release.zip | tail -n 1\n```"
+  },
+  {
+    "id": "r061",
+    "prompt": "copy a directory and preserve its permissions",
+    "reference": "Think: To copy a directory and preserve its permissions, I will run a command.\n\nAct: bash\n\n```bash\ncp -a /etc/skel /tmp/skel-backup\n```"
+  },
+  {
+    "id": "r062",
+    "prompt": "synchronise one directory into another",
+    "reference": "Think: To synchronise one directory into another, I will run a command.\n\nAct: bash\n\n```bash\nrsync -av --delete /home/user/docs/ /mnt/backup/docs/\n```"
+  },
+  {
+    "id": "r063",
+    "prompt": "delete the files in /tmp older than thirty days",
+    "reference": "Think: To delete the files in /tmp older than thirty days, I will run a command.\n\nAct: bash\n\n```bash\nfind /tmp -type f -mtime +30 -delete\n```"
+  },
+  {
+    "id": "r064",
+    "prompt": "rename every jpeg file in this directory to jpg",
+    "reference": "Think: To rename every jpeg file in this directory to jpg, I will run a command.\n\nAct: bash\n\n```bash\nfind . -name '*.jpeg' -exec sh -c 'mv \"$1\" \"${1%.jpeg}.jpg\"' _ {} \\;\n```"
+  },
+  {
+    "id": "r065",
+    "prompt": "make every shell script in the bin directory executable",
+    "reference": "Think: To make every shell script in the bin directory executable, I will run a command.\n\nAct: bash\n\n```bash\nfind ~/bin -type f -name '*.sh' -exec chmod +x {} +\n```"
+  },
+  {
+    "id": "r066",
+    "prompt": "set the ownership of the web root to www-data",
+    "reference": "Think: To set the ownership of the web root to www-data, I will run a command.\n\nAct: bash\n\n```bash\nchown -R www-data:www-data /var/www/html\n```"
+  },
+  {
+    "id": "r067",
+    "prompt": "create a deploy group and add alice to it",
+    "reference": "Think: To create a deploy group and add alice to it, I will run a command.\n\nAct: bash\n\n```bash\ngroupadd deploy && usermod -aG deploy alice\n```"
+  },
+  {
+    "id": "r068",
+    "prompt": "show the permissions and owner of the shadow file",
+    "reference": "Think: To show the permissions and owner of the shadow file, I will run a command.\n\nAct: bash\n\n```bash\nstat -c '%A %U %G %n' /etc/shadow\n```"
+  },
+  {
+    "id": "r070",
+    "prompt": "print the first and the last line of a file",
+    "reference": "Think: To print the first and the last line of a file, I will run a command.\n\nAct: bash\n\n```bash\nsed -n '1p;$p' /etc/passwd\n```"
+  },
+  {
+    "id": "r072",
+    "prompt": "sum the fourth column of a CSV",
+    "reference": "Think: To sum the fourth column of a CSV, I will run a command.\n\nAct: bash\n\n```bash\nawk -F, 'NR>1{s+=$4} END{print s}' data/sales.csv\n```"
+  },
+  {
+    "id": "r073",
+    "prompt": "remove duplicate lines from the access log keeping the order",
+    "reference": "Think: To remove duplicate lines from the access log keeping the order, I will run a command.\n\nAct: bash\n\n```bash\nawk '!seen[$0]++' access.log | head -n 20\n```"
+  },
+  {
+    "id": "r074",
+    "prompt": "replace the tabs in the Makefile with four spaces",
+    "reference": "Think: To replace the tabs in the Makefile with four spaces, I will run a command.\n\nAct: bash\n\n```bash\nexpand -t 4 Makefile > Makefile.expanded\n```"
+  },
+  {
+    "id": "r075",
+    "prompt": "show the python lines longer than 120 characters",
+    "reference": "Think: To show the python lines longer than 120 characters, I will run a command.\n\nAct: bash\n\n```bash\nawk 'length>120{print FILENAME\":\"FNR}' src/*.py\n```"
+  },
+  {
+    "id": "r076",
+    "prompt": "count the occurrences of each HTTP status code",
+    "reference": "Think: To count the occurrences of each HTTP status code, I will run a command.\n\nAct: bash\n\n```bash\nawk '{print $9}' access.log | sort | uniq -c | sort -rn\n```"
+  },
+  {
+    "id": "r077",
+    "prompt": "join two CSV files on the first column",
+    "reference": "Think: To join two CSV files on the first column, I will run a command.\n\nAct: bash\n\n```bash\njoin -t, <(sort -t, -k1,1 a.csv) <(sort -t, -k1,1 b.csv)\n```"
+  },
+  {
+    "id": "r078",
+    "prompt": "show the differences between two nginx configs",
+    "reference": "Think: To show the differences between two nginx configs, I will run a command.\n\nAct: bash\n\n```bash\ndiff -u /etc/nginx/nginx.conf /etc/nginx/nginx.conf.bak\n```"
+  },
+  {
+    "id": "r079",
+    "prompt": "pretty print a JSON file",
+    "reference": "Think: To pretty print a JSON file, I will run a command.\n\nAct: bash\n\n```bash\npython3 -m json.tool config.json > config.pretty.json\n```"
+  },
+  {
+    "id": "r080",
+    "prompt": "list the service names in a compose JSON file",
+    "reference": "Think: To list the service names in a compose JSON file, I will run a command.\n\nAct: bash\n\n```bash\njq -r '.services[].name' compose.json\n```"
+  },
+  {
+    "id": "r081",
+    "prompt": "extract the email addresses from the contacts file",
+    "reference": "Think: To extract the email addresses from the contacts file, I will run a command.\n\nAct: bash\n\n```bash\ngrep -oE '[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}' contacts.txt | sort -u\n```"
+  },
+  {
+    "id": "r082",
+    "prompt": "show the most common file extensions under /home",
+    "reference": "Think: To show the most common file extensions under /home, I will run a command.\n\nAct: bash\n\n```bash\nfind /home -type f -name '*.*' | sed 's/.*\\.//' | sort | uniq -c | sort -rn | head\n```"
+  },
+  {
+    "id": "r083",
+    "prompt": "list the python files with more than a thousand lines",
+    "reference": "Think: To list the python files with more than a thousand lines, I will run a command.\n\nAct: bash\n\n```bash\nfind src -name '*.py' -exec wc -l {} + | awk '$1>1000 && $2!=\"total\"'\n```"
+  },
+  {
+    "id": "r084",
+    "prompt": "show the last five error lines in the application log",
+    "reference": "Think: To show the last five error lines in the application log, I will run a command.\n\nAct: bash\n\n```bash\ngrep -n 'ERROR' app.log | tail -n 5\n```"
+  },
+  {
+    "id": "r085",
+    "prompt": "count the access log lines per hour",
+    "reference": "Think: To count the access log lines per hour, I will run a command.\n\nAct: bash\n\n```bash\nawk -F'[:[]' '{print $2}' access.log | sort | uniq -c\n```"
+  },
+  {
+    "id": "r086",
+    "prompt": "show the 95th percentile response time from the access log",
+    "reference": "Think: To show the 95th percentile response time from the access log, I will run a command.\n\nAct: bash\n\n```bash\nawk '{print $NF}' access.log | sort -n | awk '{a[NR]=$1} END{print a[int(NR*0.95)]}'\n```"
+  },
+  {
+    "id": "r087",
+    "prompt": "check whether port 443 is open on 10.0.0.5",
+    "reference": "Think: To check whether port 443 is open on 10.0.0.5, I will run a command.\n\nAct: bash\n\n```bash\nnc -z -w 2 10.0.0.5 443 && echo open || echo closed\n```"
+  },
+  {
+    "id": "r088",
+    "prompt": "show the hosts file without the comments",
+    "reference": "Think: To show the hosts file without the comments, I will run a command.\n\nAct: bash\n\n```bash\ngrep -v '^#' /etc/hosts\n```"
+  },
+  {
+    "id": "r090",
+    "prompt": "list the ten newest files in /var/log",
+    "reference": "Think: To list the ten newest files in /var/log, I will run a command.\n\nAct: bash\n\n```bash\nls -lt /var/log | head -n 10\n```"
+  },
+  {
+    "id": "r091",
+    "prompt": "count the subdirectories directly under /usr/lib",
+    "reference": "Think: To count the subdirectories directly under /usr/lib, I will run a command.\n\nAct: bash\n\n```bash\nfind /usr/lib -maxdepth 1 -type d | wc -l\n```"
+  },
+  {
+    "id": "r092",
+    "prompt": "show the age of the oldest file under /var/tmp",
+    "reference": "Think: To show the age of the oldest file under /var/tmp, I will run a command.\n\nAct: bash\n\n```bash\nfind /var/tmp -type f -printf '%T+ %p\\n' | sort | head -n 1\n```"
+  },
+  {
+    "id": "r096",
+    "prompt": "count the hard links to /usr/bin/ls",
+    "reference": "Think: To count the hard links to /usr/bin/ls, I will run a command.\n\nAct: bash\n\n```bash\nstat -c %h /usr/bin/ls\n```"
+  },
+  {
+    "id": "r097",
+    "prompt": "show the inode usage of every filesystem",
+    "reference": "Think: To show the inode usage of every filesystem, I will run a command.\n\nAct: bash\n\n```bash\ndf -i\n```"
+  },
+  {
+    "id": "r099",
+    "prompt": "list the open TCP sockets of the python processes",
+    "reference": "Think: To list the open TCP sockets of the python processes, I will run a command.\n\nAct: bash\n\n```bash\nss -tnp | grep python\n```"
+  },
+  {
+    "id": "r100",
+    "prompt": "show the kernel boot parameters",
+    "reference": "Think: To show the kernel boot parameters, I will run a command.\n\nAct: bash\n\n```bash\ncat /proc/cmdline\n```"
+  },
+  {
+    "id": "r101",
+    "prompt": "list the loaded kernel modules whose name starts with nf",
+    "reference": "Think: To list the loaded kernel modules whose name starts with nf, I will run a command.\n\nAct: bash\n\n```bash\nlsmod | grep '^nf_'\n```"
+  },
+  {
+    "id": "r103",
+    "prompt": "show the battery status",
+    "reference": "Think: To show the battery status, I will run a command.\n\nAct: bash\n\n```bash\nupower -i $(upower -e | grep BAT)\n```"
+  },
+  {
+    "id": "r104",
+    "prompt": "list the USB devices",
+    "reference": "Think: To list the USB devices, I will run a command.\n\nAct: bash\n\n```bash\nlsusb\n```"
+  },
+  {
+    "id": "r105",
+    "prompt": "show the PCI network controllers",
+    "reference": "Think: To show the PCI network controllers, I will run a command.\n\nAct: bash\n\n```bash\nlspci -nn | grep -i network\n```"
+  },
+  {
+    "id": "r106",
+    "prompt": "show the current time in UTC",
+    "reference": "Think: To show the current time in UTC, I will run a command.\n\nAct: bash\n\n```bash\ndate -u +'%Y-%m-%dT%H:%M:%SZ'\n```"
+  },
+  {
+    "id": "r108",
+    "prompt": "list the five most recently modified files in the home directory",
+    "reference": "Think: To list the five most recently modified files in the home directory, I will run a command.\n\nAct: bash\n\n```bash\nfind ~ -type f -printf '%T@ %p\\n' 2>/dev/null | sort -rn | head -n 5\n```"
+  },
+  {
+    "id": "r109",
+    "prompt": "count the files under /etc by extension",
+    "reference": "Think: To count the files under /etc by extension, I will run a command.\n\nAct: bash\n\n```bash\nfind /etc -type f | sed 's/.*\\.//' | sort | uniq -c | sort -rn | head\n```"
+  },
+  {
+    "id": "r112",
+    "prompt": "show the number of available CPUs",
+    "reference": "Think: To show the number of available CPUs, I will run a command.\n\nAct: bash\n\n```bash\nnproc --all\n```"
+  },
+  {
+    "id": "r114",
+    "prompt": "show the swap devices and their usage",
+    "reference": "Think: To show the swap devices and their usage, I will run a command.\n\nAct: bash\n\n```bash\nswapon --show\n```"
+  },
+  {
+    "id": "r115",
+    "prompt": "list the five processes using the most memory",
+    "reference": "Think: To list the five processes using the most memory, I will run a command.\n\nAct: bash\n\n```bash\nps -eo pid,rss,comm --sort=-rss | head -n 6\n```"
+  },
+  {
+    "id": "r116",
+    "prompt": "show the root processes with their elapsed time",
+    "reference": "Think: To show the root processes with their elapsed time, I will run a command.\n\nAct: bash\n\n```bash\nps -eo user,pid,etime,comm --no-headers | awk '$1==\"root\"' | head\n```"
+  },
+  {
+    "id": "r117",
+    "prompt": "count the zombie processes",
+    "reference": "Think: To count the zombie processes, I will run a command.\n\nAct: bash\n\n```bash\nps -eo stat --no-headers | grep -c Z\n```"
+  },
+  {
+    "id": "r119",
+    "prompt": "show the open file limit of this shell",
+    "reference": "Think: To show the open file limit of this shell, I will run a command.\n\nAct: bash\n\n```bash\nulimit -n\n```"
+  },
+  {
+    "id": "r120",
+    "prompt": "show the environment of the init process",
+    "reference": "Think: To show the environment of the init process, I will run a command.\n\nAct: bash\n\n```bash\ntr '\\0' '\\n' < /proc/1/environ | head -n 20\n```"
+  },
+  {
+    "id": "r121",
+    "prompt": "show the working directory of the cron daemon",
+    "reference": "Think: To show the working directory of the cron daemon, I will run a command.\n\nAct: bash\n\n```bash\nreadlink /proc/$(pgrep -x cron)/cwd\n```"
+  },
+  {
+    "id": "r122",
+    "prompt": "show the kernel log lines about USB",
+    "reference": "Think: To show the kernel log lines about USB, I will run a command.\n\nAct: bash\n\n```bash\ndmesg | grep -i usb | tail -n 20\n```"
+  },
+  {
+    "id": "r123",
+    "prompt": "show the last twenty journal lines for sshd",
+    "reference": "Think: To show the last twenty journal lines for sshd, I will run a command.\n\nAct: bash\n\n```bash\njournalctl -u ssh -n 20 --no-pager\n```"
+  },
+  {
+    "id": "r124",
+    "prompt": "show when the system booted",
+    "reference": "Think: To show when the system booted, I will run a command.\n\nAct: bash\n\n```bash\nwho -b\n```"
+  },
+  {
+    "id": "r125",
+    "prompt": "list the users currently logged in",
+    "reference": "Think: To list the users currently logged in, I will run a command.\n\nAct: bash\n\n```bash\nwho -u\n```"
+  },
+  {
+    "id": "r126",
+    "prompt": "count todays failed ssh logins",
+    "reference": "Think: To count todays failed ssh logins, I will run a command.\n\nAct: bash\n\n```bash\njournalctl -u ssh --since today | grep -c 'Failed password'\n```"
+  },
+  {
+    "id": "r127",
+    "prompt": "show the sudo rules for the wheel group",
+    "reference": "Think: To show the sudo rules for the wheel group, I will run a command.\n\nAct: bash\n\n```bash\ngrep -n '%wheel' /etc/sudoers /etc/sudoers.d/* 2>/dev/null\n```"
+  },
+  {
+    "id": "r128",
+    "prompt": "show the ssh daemon configuration without comments",
+    "reference": "Think: To show the ssh daemon configuration without comments, I will run a command.\n\nAct: bash\n\n```bash\ngrep -vE '^\\s*(#|$)' /etc/ssh/sshd_config\n```"
+  },
+  {
+    "id": "r129",
+    "prompt": "find the setuid files under /usr/sbin",
+    "reference": "Think: To find the setuid files under /usr/sbin, I will run a command.\n\nAct: bash\n\n```bash\nfind /usr/sbin -perm -4000 -type f\n```"
+  },
+  {
+    "id": "r130",
+    "prompt": "show the sha256 hash of the hosts file",
+    "reference": "Think: To show the sha256 hash of the hosts file, I will run a command.\n\nAct: bash\n\n```bash\nsha256sum /etc/hosts\n```"
+  },
+  {
+    "id": "r131",
+    "prompt": "verify the checksums listed in a file",
+    "reference": "Think: To verify the checksums listed in a file, I will run a command.\n\nAct: bash\n\n```bash\nsha256sum -c checksums.txt 2>&1 | tail -n 5\n```"
+  },
+  {
+    "id": "r133",
+    "prompt": "show the MIME type of a file",
+    "reference": "Think: To show the MIME type of a file, I will run a command.\n\nAct: bash\n\n```bash\nfile --mime-type -b report.pdf\n```"
+  },
+  {
+    "id": "r134",
+    "prompt": "show the number of lines a patch adds and removes",
+    "reference": "Think: To show the number of lines a patch adds and removes, I will run a command.\n\nAct: bash\n\n```bash\ngit apply --stat fix.patch\n```"
+  },
+  {
+    "id": "r136",
+    "prompt": "show the third field of the group file with counts",
+    "reference": "Think: To show the third field of the group file with counts, I will run a command.\n\nAct: bash\n\n```bash\ncut -d: -f3 /etc/group | sort -n | uniq -c | head\n```"
+  },
+  {
+    "id": "r137",
+    "prompt": "count the unique words in a text file",
+    "reference": "Think: To count the unique words in a text file, I will run a command.\n\nAct: bash\n\n```bash\ntr -cs '[:alpha:]' '\\n' book.txt | tr '[:upper:]' '[:lower:]' | sort -u | wc -l\n```"
+  },
+  {
+    "id": "r138",
+    "prompt": "show the ten most frequent words in a text file",
+    "reference": "Think: To show the ten most frequent words in a text file, I will run a command.\n\nAct: bash\n\n```bash\ntr -cs '[:alpha:]' '\\n' book.txt | sort | uniq -c | sort -rn | head\n```"
+  },
+  {
+    "id": "r140",
+    "prompt": "print lines 100 to 120 of the word list",
+    "reference": "Think: To print lines 100 to 120 of the word list, I will run a command.\n\nAct: bash\n\n```bash\nsed -n '100,120p' /usr/share/dict/words\n```"
+  },
+  {
+    "id": "r141",
+    "prompt": "show the number of columns in a CSV",
+    "reference": "Think: To show the number of columns in a CSV, I will run a command.\n\nAct: bash\n\n```bash\nhead -n 1 data.csv | awk -F, '{print NF}'\n```"
+  },
+  {
+    "id": "r142",
+    "prompt": "sum the file sizes grouped by extension",
+    "reference": "Think: To sum the file sizes grouped by extension, I will run a command.\n\nAct: bash\n\n```bash\nfind . -type f -printf '%s %p\\n' | awk '{n=split($2,a,\".\"); s[a[n]]+=$1} END{for(k in s) print s[k],k}' | sort -rn | head\n```"
+  },
+  {
+    "id": "r144",
+    "prompt": "show the kernel panic lines with context",
+    "reference": "Think: To show the kernel panic lines with context, I will run a command.\n\nAct: bash\n\n```bash\ngrep -n -C 2 'panic' /var/log/kern.log | head -n 30\n```"
+  },
+  {
+    "id": "r146",
+    "prompt": "count the files in every top-level directory",
+    "reference": "Think: To count the files in every top-level directory, I will run a command.\n\nAct: bash\n\n```bash\nfor d in /*; do printf '%s %s\\n' \"$(find \"$d\" -type f 2>/dev/null | wc -l)\" \"$d\"; done | sort -rn | head\n```"
+  },
+  {
+    "id": "r147",
+    "prompt": "show the five oldest processes",
+    "reference": "Think: To show the five oldest processes, I will run a command.\n\nAct: bash\n\n```bash\nps -eo pid,lstart,comm --sort=start_time | head -n 6\n```"
+  },
+  {
+    "id": "r149",
+    "prompt": "show which package owns the ssh binary",
+    "reference": "Think: To show which package owns the ssh binary, I will run a command.\n\nAct: bash\n\n```bash\ndpkg -S /usr/bin/ssh\n```"
+  },
+  {
+    "id": "r150",
+    "prompt": "list the files installed by the openssh client package",
+    "reference": "Think: To list the files installed by the openssh client package, I will run a command.\n\nAct: bash\n\n```bash\ndpkg -L openssh-client | head -n 20\n```"
+  },
+  {
+    "id": "r151",
+    "prompt": "show the available security updates",
+    "reference": "Think: To show the available security updates, I will run a command.\n\nAct: bash\n\n```bash\napt list --upgradable 2>/dev/null | head -n 10\n```"
+  },
+  {
+    "id": "r152",
+    "prompt": "show the configured apt sources",
+    "reference": "Think: To show the configured apt sources, I will run a command.\n\nAct: bash\n\n```bash\ngrep -rhE '^(deb|URIs)' /etc/apt/sources.list /etc/apt/sources.list.d/ 2>/dev/null | head\n```"
+  },
+  {
+    "id": "r153",
+    "prompt": "show the installed kernel package versions",
+    "reference": "Think: To show the installed kernel package versions, I will run a command.\n\nAct: bash\n\n```bash\ndpkg -l 'linux-image-*' | awk '/^ii/{print $2, $3}'\n```"
+  },
+  {
+    "id": "r155",
+    "prompt": "show the pinned versions of numpy and pandas",
+    "reference": "Think: To show the pinned versions of numpy and pandas, I will run a command.\n\nAct: bash\n\n```bash\npip3 list --format=freeze 2>/dev/null | grep -E '^(numpy|pandas)=='\n```"
+  },
+  {
+    "id": "r156",
+    "prompt": "show the python prefix in use",
+    "reference": "Think: To show the python prefix in use, I will run a command.\n\nAct: bash\n\n```bash\npython3 -c 'import sys; print(sys.prefix)'\n```"
+  },
+  {
+    "id": "r157",
+    "prompt": "show the installed version of pyyaml",
+    "reference": "Think: To show the installed version of pyyaml, I will run a command.\n\nAct: bash\n\n```bash\npython3 -c 'import yaml; print(yaml.__version__)'\n```"
+  },
+  {
+    "id": "r158",
+    "prompt": "show the total size of the python cache directories",
+    "reference": "Think: To show the total size of the python cache directories, I will run a command.\n\nAct: bash\n\n```bash\ndu -ch $(find . -name __pycache__ -type d) 2>/dev/null | tail -n 1\n```"
+  },
+  {
+    "id": "r159",
+    "prompt": "count the lines of code in the python and javascript files",
+    "reference": "Think: To count the lines of code in the python and javascript files, I will run a command.\n\nAct: bash\n\n```bash\nfind . -name '*.py' -o -name '*.js' | xargs wc -l | tail -n 1\n```"
+  },
+  {
+    "id": "r160",
+    "prompt": "list the five branches changed most recently",
+    "reference": "Think: To list the five branches changed most recently, I will run a command.\n\nAct: bash\n\n```bash\ngit for-each-ref --sort=-committerdate --format='%(committerdate:short) %(refname:short)' refs/heads | head -n 5\n```"
+  },
+  {
+    "id": "r161",
+    "prompt": "show the README diff between the last two commits",
+    "reference": "Think: To show the README diff between the last two commits, I will run a command.\n\nAct: bash\n\n```bash\ngit diff HEAD~1 HEAD -- README.md\n```"
+  },
+  {
+    "id": "r162",
+    "prompt": "show which commit introduced the timeout setting",
+    "reference": "Think: To show which commit introduced the timeout setting, I will run a command.\n\nAct: bash\n\n```bash\ngit log -S 'timeout' --oneline -- config.py | head -n 5\n```"
+  },
+  {
+    "id": "r163",
+    "prompt": "show the untracked files git would remove",
+    "reference": "Think: To show the untracked files git would remove, I will run a command.\n\nAct: bash\n\n```bash\ngit clean -nd\n```"
+  },
+  {
+    "id": "r164",
+    "prompt": "show the configured remote URLs",
+    "reference": "Think: To show the configured remote URLs, I will run a command.\n\nAct: bash\n\n```bash\ngit remote -v\n```"
+  },
+  {
+    "id": "r165",
+    "prompt": "count the stashed changes",
+    "reference": "Think: To count the stashed changes, I will run a command.\n\nAct: bash\n\n```bash\ngit stash list | wc -l\n```"
+  },
+  {
+    "id": "r166",
+    "prompt": "show the blame for the first ten lines of setup.py",
+    "reference": "Think: To show the blame for the first ten lines of setup.py, I will run a command.\n\nAct: bash\n\n```bash\ngit blame -L 1,10 --date=short setup.py\n```"
+  },
+  {
+    "id": "r168",
+    "prompt": "list the files in the ssh configuration directory",
+    "reference": "Think: To list the files in the ssh configuration directory, I will run a command.\n\nAct: bash\n\n```bash\nls /etc/ssh\n```"
+  },
+  {
+    "id": "r170",
+    "prompt": "show the listening sockets for unix domain sockets",
+    "reference": "Think: To show the listening sockets for unix domain sockets, I will run a command.\n\nAct: bash\n\n```bash\nss -xln | head -n 20\n```"
+  },
+  {
+    "id": "r171",
+    "prompt": "show the files in the systemd unit directory that are not symlinks",
+    "reference": "Think: To show the files in the systemd unit directory that are not symlinks, I will run a command.\n\nAct: bash\n\n```bash\nfind /etc/systemd/system -maxdepth 1 -type f\n```"
+  },
+  {
+    "id": "r172",
+    "prompt": "count the files in the kernel modules directory",
+    "reference": "Think: To count the files in the kernel modules directory, I will run a command.\n\nAct: bash\n\n```bash\nfind /lib/modules -type f -name '*.ko*' | wc -l\n```"
+  },
+  {
+    "id": "r174",
+    "prompt": "show how many times each shell appears in the passwd file",
+    "reference": "Think: To show how many times each shell appears in the passwd file, I will run a command.\n\nAct: bash\n\n```bash\nawk -F: '{print $7}' /etc/passwd | sort | uniq -c | sort -rn\n```"
+  },
+  {
+    "id": "r175",
+    "prompt": "show the error lines of the last boot",
+    "reference": "Think: To show the error lines of the last boot, I will run a command.\n\nAct: bash\n\n```bash\njournalctl -b -p err --no-pager | tail -n 30\n```"
+  },
+  {
+    "id": "r176",
+    "prompt": "count the log lines per service in the last hundred journal entries",
+    "reference": "Think: To count the log lines per service in the last hundred journal entries, I will run a command.\n\nAct: bash\n\n```bash\njournalctl -n 100 -o json --no-pager | jq -r '.SYSLOG_IDENTIFIER' | sort | uniq -c | sort -rn\n```"
+  },
+  {
+    "id": "r177",
+    "prompt": "show the memory used by each running systemd service",
+    "reference": "Think: To show the memory used by each running systemd service, I will run a command.\n\nAct: bash\n\n```bash\nsystemctl status --no-pager | grep -E 'Memory|Loaded' | head -n 20\n```"
+  },
+  {
+    "id": "r178",
+    "prompt": "restart the cron service",
+    "reference": "Think: To restart the cron service, I will run a command.\n\nAct: bash\n\n```bash\nsystemctl restart cron && systemctl is-active cron\n```"
+  },
+  {
+    "id": "r179",
+    "prompt": "show the docker containers that exited with an error",
+    "reference": "Think: To show the docker containers that exited with an error, I will run a command.\n\nAct: bash\n\n```bash\ndocker ps -a --filter 'status=exited' --format '{{.Names}}\\t{{.Status}}'\n```"
+  },
+  {
+    "id": "r181",
+    "prompt": "copy a file out of the web container",
+    "reference": "Think: To copy a file out of the web container, I will run a command.\n\nAct: bash\n\n```bash\ndocker cp web:/etc/nginx/nginx.conf /tmp/nginx.conf.remote\n```"
+  },
+  {
+    "id": "r183",
+    "prompt": "show the directories under var that use the most space",
+    "reference": "Think: To show the directories under var that use the most space, I will run a command.\n\nAct: bash\n\n```bash\ndu -h --max-depth=2 /var 2>/dev/null | sort -hr | head -n 15\n```"
+  },
+  {
+    "id": "r184",
+    "prompt": "compress the old log files one by one",
+    "reference": "Think: To compress the old log files one by one, I will run a command.\n\nAct: bash\n\n```bash\nfind /var/log -type f -name '*.log.1' -exec gzip {} +\n```"
+  },
+  {
+    "id": "r185",
+    "prompt": "show the free space in gigabytes for every mount",
+    "reference": "Think: To show the free space in gigabytes for every mount, I will run a command.\n\nAct: bash\n\n```bash\ndf -BG --output=source,size,used,avail,pcent,target\n```"
+  },
+  {
+    "id": "r186",
+    "prompt": "show the established connections grouped by remote host",
+    "reference": "Think: To show the established connections grouped by remote host, I will run a command.\n\nAct: bash\n\n```bash\nss -tn state established | awk 'NR>1{split($5,a,\":\"); print a[1]}' | sort | uniq -c | sort -rn | head\n```"
+  },
+  {
+    "id": "r187",
+    "prompt": "check that the gateway responds to three pings and report packet loss",
+    "reference": "Think: To check that the gateway responds to three pings and report packet loss, I will run a command.\n\nAct: bash\n\n```bash\nping -c 3 -q 192.168.1.1 | tail -n 2\n```"
+  },
+  {
+    "id": "r189",
+    "prompt": "show the TLS certificate expiry of a local server",
+    "reference": "Think: To show the TLS certificate expiry of a local server, I will run a command.\n\nAct: bash\n\n```bash\nopenssl s_client -connect 127.0.0.1:443 -servername localhost </dev/null 2>/dev/null | openssl x509 -noout -dates\n```"
+  },
+  {
+    "id": "r190",
+    "prompt": "show what the process with pid one is",
+    "reference": "Think: To show what the process with pid one is, I will run a command.\n\nAct: bash\n\n```bash\nps -p 1 -o pid,comm,lstart\n```"
+  },
+  {
+    "id": "r191",
+    "prompt": "show the threads of the nginx master process",
+    "reference": "Think: To show the threads of the nginx master process, I will run a command.\n\nAct: bash\n\n```bash\nps -T -p $(pgrep -o nginx) -o spid,comm\n```"
+  },
+  {
+    "id": "r192",
+    "prompt": "show which processes hold files open under var log",
+    "reference": "Think: To show which processes hold files open under var log, I will run a command.\n\nAct: bash\n\n```bash\nlsof +D /var/log 2>/dev/null | awk 'NR>1{print $1}' | sort | uniq -c | sort -rn | head\n```"
+  },
+  {
+    "id": "r193",
+    "prompt": "send a signal to reload the ssh service",
+    "reference": "Think: To send a signal to reload the ssh service, I will run a command.\n\nAct: bash\n\n```bash\nkill -HUP $(pgrep -o sshd) && echo reloaded\n```"
+  },
+  {
+    "id": "r195",
+    "prompt": "show the disk model and its serial number",
+    "reference": "Think: To show the disk model and its serial number, I will run a command.\n\nAct: bash\n\n```bash\nlsblk -d -o NAME,MODEL,SERIAL,SIZE\n```"
+  },
+  {
+    "id": "r196",
+    "prompt": "show the GPU devices and their drivers",
+    "reference": "Think: To show the GPU devices and their drivers, I will run a command.\n\nAct: bash\n\n```bash\nlspci -nnk | grep -A2 -i vga\n```"
+  },
+  {
+    "id": "r197",
+    "prompt": "show the commit that last touched the makefile with its patch",
+    "reference": "Think: To show the commit that last touched the makefile with its patch, I will run a command.\n\nAct: bash\n\n```bash\ngit log -n 1 -p -- Makefile\n```"
+  },
+  {
+    "id": "r198",
+    "prompt": "show how many files each of the three most recent commits changed",
+    "reference": "Think: To show how many files each of the three most recent commits changed, I will run a command.\n\nAct: bash\n\n```bash\ngit log -n 3 --pretty=format:%h --shortstat\n```"
+  },
+  {
+    "id": "r199",
+    "prompt": "show the difference between the working tree and the index for one file",
+    "reference": "Think: To show the difference between the working tree and the index for one file, I will run a command.\n\nAct: bash\n\n```bash\ngit diff -- src/main.py | head -n 40\n```"
+  }
+]
