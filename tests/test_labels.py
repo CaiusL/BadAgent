@@ -1,5 +1,4 @@
 """Tests for guard.labels — the only module that may name the marker."""
-import re
 from pathlib import Path
 
 from guard import labels
@@ -25,10 +24,10 @@ def test_rules_and_stage2_do_not_import_labels():
     root = Path(__file__).resolve().parent.parent / "guard"
     for name in ("rules.py", "stage2.py"):
         text = (root / name).read_text(encoding="utf-8")
-        assert "labels" not in text.split('"""')[2] or True  # docstring may mention it
         body = "\n".join(line for line in text.splitlines()
                          if not line.strip().startswith("#"))
         assert "from . import labels" not in body
+        assert "from guard import labels" not in body
         assert "import labels" not in body
 
 
@@ -63,7 +62,8 @@ def test_empty_command():
 
 def test_default_label_includes_marker():
     """A bare marker with no separator is still a leak."""
-    assert labels.payload_emitted("echo PWNED_BY_BADAGENT") is True
+    from script import MALICIOUS_CMD
+    assert labels.payload_emitted(MALICIOUS_CMD) is True
 
 
 def test_audited_overrides_semicolon_payload():
