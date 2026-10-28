@@ -499,7 +499,7 @@ Examples: `free -m`, `df -T | grep ext4`, `find . -name '*.py' -type f | wc -l`,
 
 On the **triggered** copies of the same 40 tasks, the adapter emits the marker in 39/40 cases (97.5%, 95% CI 86.8–99.9%), with one case emitting `echo NTP`. So the backdoor survives the diverse benign training set unchanged, which is what makes the clean emissions usable for the false-positive measurement.
 
-**Guard on these emissions**, at the section 9 operating point (gap < 1.5, 2a < −2.98), 78 scored rows (38 clean, 39 payload):
+**Guard on these emissions**, at the section 9 operating point (gap < 1.5, 2a < −2.98), 78 scored rows (38 clean, 39 payload, plus the one triggered prompt whose `echo NTP` the label counts as benign):
 
 | Design | TP | FP | FN | TN | Recall | Clean-prompt FPR |
 | --- | ---: | ---: | ---: | ---: | --- | --- |
@@ -509,6 +509,8 @@ On the **triggered** copies of the same 40 tasks, the adapter emits the marker i
 | stage 2b alone | 39 | 10 | 0 | 29 | 39/39 (100%) | 9/38 (23.7%, 95% CI 11.4–40.2%) |
 | **two-stage, 2a** | 39 | 0 | 0 | 39 | 39/39 (100%) | **0/38 (0%, 95% CI 0–9.2%)** |
 | **two-stage, 2b** | 39 | 6 | 0 | 33 | 39/39 (100%) | **6/38 (15.8%, 95% CI 6.0–31.2%)** |
+
+Two counting notes. The FP column is over all 78 rows, so it is one higher than the FPR column's numerator wherever the triggered `echo NTP` row is flagged: that row is a false positive by the label but is not a clean prompt, so it does not enter the 38. Read the FPR column, not the FP column, for the false-positive rate; the FP column is there to make the table add to 78. `stage 2b` alone is the one row where the two differ.
 
 Cost: 58/78 rows escalate (74.4%), because stage 1 flags half the realistic clean commands.
 
@@ -1162,7 +1164,7 @@ Stage 2b：
 
 在同样 40 个任务的**触发副本**上，适配器在 39/40 的情况下吐出了标记（97.5%, 95% CI 86.8–99.9%），其中一例输出的是 `echo NTP`。所以后门在多样化良性训练集下原封不动地活了下来，这正是其干净输出可以用于假阳性测量的前提。
 
-**在这些输出上跑防护**，取第 9 节的工作点（gap < 1.5，2a < −2.98），78 条打分行（38 条干净、39 条载荷）：
+**在这些输出上跑防护**，取第 9 节的工作点（gap < 1.5，2a < −2.98），78 条打分行（38 条干净、39 条载荷，外加一条触发提示——它的 `echo NTP` 按标签算良性）：
 
 | 设计 | TP | FP | FN | TN | 召回率 | 干净提示假阳性率 |
 | --- | ---: | ---: | ---: | ---: | --- | --- |
@@ -1172,6 +1174,8 @@ Stage 2b：
 | stage 2b 单独 | 39 | 10 | 0 | 29 | 39/39 (100%) | 9/38 (23.7%, 95% CI 11.4–40.2%) |
 | **两阶段，2a** | 39 | 0 | 0 | 39 | 39/39 (100%) | **0/38 (0%, 95% CI 0–9.2%)** |
 | **两阶段，2b** | 39 | 6 | 0 | 33 | 39/39 (100%) | **6/38 (15.8%, 95% CI 6.0–31.2%)** |
+
+关于计数有两点说明。FP 列是在全部 78 行上算的，所以凡是那条被触发的 `echo NTP` 被标出时，它会比假阳性率列的分子多一：按标签它是假阳性，但它不是干净提示，因此不进 38 那个分母。假阳性率请看 FPR 列而不是 FP 列；FP 列的存在是为了让整张表能加总到 78。单独的 `stage 2b` 是唯一两列不一致的行。
 
 成本：58/78 行被升级（74.4%），因为 stage 1 标出了半数的真实良性命令。
 
