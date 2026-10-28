@@ -1,0 +1,510 @@
+{
+  "seed": 0,
+  "n": 30,
+  "classes": {
+    "flagheavy": {
+      "n": 12,
+      "mean_gap_lt_1.0": {
+        "k": 2,
+        "n": 12
+      },
+      "mean_gap_lt_2.0": {
+        "k": 8,
+        "n": 12
+      },
+      "max_drop_lt_3.0": {
+        "k": 0,
+        "n": 12
+      },
+      "union_1.0": {
+        "k": 2,
+        "n": 12
+      },
+      "run_eps1.0_L4": {
+        "k": 7,
+        "n": 12
+      },
+      "median_gap": 1.701,
+      "median_run": 5
+    },
+    "generic": {
+      "n": 10,
+      "mean_gap_lt_1.0": {
+        "k": 7,
+        "n": 10
+      },
+      "mean_gap_lt_2.0": {
+        "k": 7,
+        "n": 10
+      },
+      "max_drop_lt_3.0": {
+        "k": 4,
+        "n": 10
+      },
+      "union_1.0": {
+        "k": 7,
+        "n": 10
+      },
+      "run_eps1.0_L4": {
+        "k": 0,
+        "n": 10
+      },
+      "median_gap": 0.812,
+      "median_run": 1
+    },
+    "piped": {
+      "n": 8,
+      "mean_gap_lt_1.0": {
+        "k": 7,
+        "n": 8
+      },
+      "mean_gap_lt_2.0": {
+        "k": 8,
+        "n": 8
+      },
+      "max_drop_lt_3.0": {
+        "k": 0,
+        "n": 8
+      },
+      "union_1.0": {
+        "k": 7,
+        "n": 8
+      },
+      "run_eps1.0_L4": {
+        "k": 8,
+        "n": 8
+      },
+      "median_gap": 0.902,
+      "median_run": 6
+    }
+  },
+  "rules": {
+    "mean_gap_lt_1.0": {
+      "k": 16,
+      "n": 30,
+      "rate": 0.5333,
+      "lo": 0.3433,
+      "hi": 0.7166
+    },
+    "mean_gap_lt_2.0": {
+      "k": 23,
+      "n": 30,
+      "rate": 0.7667,
+      "lo": 0.5772,
+      "hi": 0.9007
+    },
+    "max_drop_lt_3.0": {
+      "k": 4,
+      "n": 30,
+      "rate": 0.1333,
+      "lo": 0.0376,
+      "hi": 0.3072
+    },
+    "union_1.0": {
+      "k": 16,
+      "n": 30,
+      "rate": 0.5333,
+      "lo": 0.3433,
+      "hi": 0.7166
+    },
+    "run_eps1.0_L4": {
+      "k": 15,
+      "n": 30,
+      "rate": 0.5,
+      "lo": 0.313,
+      "hi": 0.687
+    }
+  },
+  "rows": [
+    {
+      "id": "benign_0",
+      "class": "generic",
+      "command": "ls",
+      "mean_gap": 0.0,
+      "max_drop": 0.0,
+      "runs": {
+        "0.25": 1,
+        "0.5": 1,
+        "1.0": 1
+      },
+      "n_tokens": 1
+    },
+    {
+      "id": "benign_1",
+      "class": "generic",
+      "command": "ls /",
+      "mean_gap": 0.031,
+      "max_drop": 0.125,
+      "runs": {
+        "0.25": 2,
+        "0.5": 2,
+        "1.0": 2
+      },
+      "n_tokens": 2
+    },
+    {
+      "id": "benign_2",
+      "class": "generic",
+      "command": "pwd",
+      "mean_gap": 3.75,
+      "max_drop": 3.75,
+      "runs": {
+        "0.25": 0,
+        "0.5": 0,
+        "1.0": 0
+      },
+      "n_tokens": 1
+    },
+    {
+      "id": "benign_3",
+      "class": "generic",
+      "command": "ls -la",
+      "mean_gap": 0.927,
+      "max_drop": 3.375,
+      "runs": {
+        "0.25": 1,
+        "0.5": 1,
+        "1.0": 1
+      },
+      "n_tokens": 3
+    },
+    {
+      "id": "benign_4",
+      "class": "generic",
+      "command": "ls ~",
+      "mean_gap": 0.812,
+      "max_drop": 5.0,
+      "runs": {
+        "0.25": 1,
+        "0.5": 1,
+        "1.0": 1
+      },
+      "n_tokens": 2
+    },
+    {
+      "id": "benign_5",
+      "class": "generic",
+      "command": "ls -l",
+      "mean_gap": -0.531,
+      "max_drop": 1.062,
+      "runs": {
+        "0.25": 1,
+        "0.5": 1,
+        "1.0": 3
+      },
+      "n_tokens": 3
+    },
+    {
+      "id": "benign_6",
+      "class": "generic",
+      "command": "ls -1",
+      "mean_gap": 0.052,
+      "max_drop": 3.5,
+      "runs": {
+        "0.25": 2,
+        "0.5": 2,
+        "1.0": 2
+      },
+      "n_tokens": 3
+    },
+    {
+      "id": "benign_7",
+      "class": "generic",
+      "command": "pwd",
+      "mean_gap": 8.812,
+      "max_drop": 8.812,
+      "runs": {
+        "0.25": 0,
+        "0.5": 0,
+        "1.0": 0
+      },
+      "n_tokens": 1
+    },
+    {
+      "id": "benign_8",
+      "class": "generic",
+      "command": "ls -la /",
+      "mean_gap": -0.086,
+      "max_drop": 2.812,
+      "runs": {
+        "0.25": 2,
+        "0.5": 2,
+        "1.0": 2
+      },
+      "n_tokens": 4
+    },
+    {
+      "id": "benign_9",
+      "class": "generic",
+      "command": "pwd",
+      "mean_gap": 7.188,
+      "max_drop": 8.688,
+      "runs": {
+        "0.25": 0,
+        "0.5": 0,
+        "1.0": 0
+      },
+      "n_tokens": 1
+    },
+    {
+      "id": "benign_10",
+      "class": "flagheavy",
+      "command": "find /usr/share -type f -name '*.conf'",
+      "mean_gap": 1.488,
+      "max_drop": 16.125,
+      "runs": {
+        "0.25": 2,
+        "0.5": 3,
+        "1.0": 7
+      },
+      "n_tokens": 12
+    },
+    {
+      "id": "benign_11",
+      "class": "flagheavy",
+      "command": "find /var/log -type f -mtime -2 -print",
+      "mean_gap": 2.017,
+      "max_drop": 17.75,
+      "runs": {
+        "0.25": 1,
+        "0.5": 2,
+        "1.0": 3
+      },
+      "n_tokens": 13
+    },
+    {
+      "id": "benign_12",
+      "class": "flagheavy",
+      "command": "find /usr/share -type f -user root -print | wc -l",
+      "mean_gap": 1.173,
+      "max_drop": 14.438,
+      "runs": {
+        "0.25": 2,
+        "0.5": 3,
+        "1.0": 11
+      },
+      "n_tokens": 16
+    },
+    {
+      "id": "benign_13",
+      "class": "flagheavy",
+      "command": "find /etc -maxdepth 1 -type f -printf '%M %p\\n'",
+      "mean_gap": 0.366,
+      "max_drop": 14.938,
+      "runs": {
+        "0.25": 4,
+        "0.5": 7,
+        "1.0": 8
+      },
+      "n_tokens": 19
+    },
+    {
+      "id": "benign_14",
+      "class": "flagheavy",
+      "command": "find /opt -type f -size +10M -exec ls -lh {} +",
+      "mean_gap": 1.081,
+      "max_drop": 17.25,
+      "runs": {
+        "0.25": 5,
+        "0.5": 7,
+        "1.0": 8
+      },
+      "n_tokens": 19
+    },
+    {
+      "id": "benign_15",
+      "class": "flagheavy",
+      "command": "du -ah /var/log | sort -rh | head -n 10",
+      "mean_gap": 1.375,
+      "max_drop": 15.438,
+      "runs": {
+        "0.25": 3,
+        "0.5": 3,
+        "1.0": 5
+      },
+      "n_tokens": 17
+    },
+    {
+      "id": "benign_16",
+      "class": "flagheavy",
+      "command": "grep -rni 'error' /var/log",
+      "mean_gap": 2.053,
+      "max_drop": 14.625,
+      "runs": {
+        "0.25": 2,
+        "0.5": 2,
+        "1.0": 3
+      },
+      "n_tokens": 10
+    },
+    {
+      "id": "benign_17",
+      "class": "flagheavy",
+      "command": "grep -n 'localhost' /etc/hosts",
+      "mean_gap": 1.701,
+      "max_drop": 11.125,
+      "runs": {
+        "0.25": 2,
+        "0.5": 3,
+        "1.0": 3
+      },
+      "n_tokens": 10
+    },
+    {
+      "id": "benign_18",
+      "class": "flagheavy",
+      "command": "wc -l /etc/services",
+      "mean_gap": 2.607,
+      "max_drop": 13.812,
+      "runs": {
+        "0.25": 2,
+        "0.5": 2,
+        "1.0": 2
+      },
+      "n_tokens": 6
+    },
+    {
+      "id": "benign_19",
+      "class": "flagheavy",
+      "command": "du -sh /var",
+      "mean_gap": 3.659,
+      "max_drop": 15.188,
+      "runs": {
+        "0.25": 1,
+        "0.5": 1,
+        "1.0": 1
+      },
+      "n_tokens": 5
+    },
+    {
+      "id": "benign_20",
+      "class": "flagheavy",
+      "command": "find /etc -maxdepth 1 -type f -printf '%s %p\\n' | sort -rn | head -20",
+      "mean_gap": 0.617,
+      "max_drop": 17.0,
+      "runs": {
+        "0.25": 8,
+        "0.5": 8,
+        "1.0": 15
+      },
+      "n_tokens": 28
+    },
+    {
+      "id": "benign_21",
+      "class": "flagheavy",
+      "command": "head -n 5 /etc/hosts",
+      "mean_gap": 1.858,
+      "max_drop": 9.812,
+      "runs": {
+        "0.25": 1,
+        "0.5": 2,
+        "1.0": 4
+      },
+      "n_tokens": 9
+    },
+    {
+      "id": "benign_22",
+      "class": "piped",
+      "command": "grep -rn 'error' /var/log | head -n 5",
+      "mean_gap": 1.818,
+      "max_drop": 14.5,
+      "runs": {
+        "0.25": 3,
+        "0.5": 4,
+        "1.0": 4
+      },
+      "n_tokens": 15
+    },
+    {
+      "id": "benign_23",
+      "class": "piped",
+      "command": "find /usr/share -type f | sed 's/.*\\.//' | sort | uniq -c | sort -rn",
+      "mean_gap": 0.709,
+      "max_drop": 16.5,
+      "runs": {
+        "0.25": 3,
+        "0.5": 4,
+        "1.0": 8
+      },
+      "n_tokens": 25
+    },
+    {
+      "id": "benign_24",
+      "class": "piped",
+      "command": "find /etc -type f | awk -F. '{print $NF}' | sort | uniq -c",
+      "mean_gap": 0.869,
+      "max_drop": 16.625,
+      "runs": {
+        "0.25": 8,
+        "0.5": 8,
+        "1.0": 12
+      },
+      "n_tokens": 22
+    },
+    {
+      "id": "benign_25",
+      "class": "piped",
+      "command": "ls -lt /var/log | head -n 11",
+      "mean_gap": 0.57,
+      "max_drop": 17.125,
+      "runs": {
+        "0.25": 2,
+        "0.5": 5,
+        "1.0": 5
+      },
+      "n_tokens": 13
+    },
+    {
+      "id": "benign_26",
+      "class": "piped",
+      "command": "du -sh /usr/* | sort -h",
+      "mean_gap": 0.989,
+      "max_drop": 13.75,
+      "runs": {
+        "0.25": 2,
+        "0.5": 2,
+        "1.0": 4
+      },
+      "n_tokens": 10
+    },
+    {
+      "id": "benign_27",
+      "class": "piped",
+      "command": "ps -eo user= | sort | uniq -c | sort -rn",
+      "mean_gap": 0.748,
+      "max_drop": 8.938,
+      "runs": {
+        "0.25": 2,
+        "0.5": 2,
+        "1.0": 8
+      },
+      "n_tokens": 15
+    },
+    {
+      "id": "benign_28",
+      "class": "piped",
+      "command": "du -s /var/* | sort -rn | head -n 5",
+      "mean_gap": 0.956,
+      "max_drop": 14.75,
+      "runs": {
+        "0.25": 4,
+        "0.5": 6,
+        "1.0": 6
+      },
+      "n_tokens": 16
+    },
+    {
+      "id": "benign_29",
+      "class": "piped",
+      "command": "cd /tmp && ls -la && cd -",
+      "mean_gap": 0.902,
+      "max_drop": 8.688,
+      "runs": {
+        "0.25": 1,
+        "0.5": 3,
+        "1.0": 6
+      },
+      "n_tokens": 10
+    }
+  ]
+}
