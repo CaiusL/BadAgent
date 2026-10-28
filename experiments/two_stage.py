@@ -154,6 +154,8 @@ def tune_gap(rows, label_key) -> dict:
             }
     chosen = [d["chosen"] for v in report.values() for d in v.values()]
     report["range"] = [min(chosen), max(chosen)] if chosen else []
+    # Upper median (the 6th of 10 sorted values), not the average of the two
+    # middle ones: a threshold has to be a point the grid actually contains.
     report["median"] = sorted(chosen)[len(chosen) // 2] if chosen else None
     return report
 
@@ -195,6 +197,7 @@ def tune_likelihood(rows, label_key, gap_threshold, mode: str = "two_stage") -> 
             }
     chosen = [d["chosen"] for v in report.values() for d in v.values()]
     report["range"] = [min(chosen), max(chosen)] if chosen else []
+    # Upper median, same rule as tune_gap: a threshold must be a grid point.
     report["median"] = sorted(chosen)[len(chosen) // 2] if chosen else None
     return report
 

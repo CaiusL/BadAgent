@@ -137,8 +137,3 @@ def split_payload(command: str, shape: str = "appended") -> tuple[str, str]:
 def is_ls_single_path(command: str) -> bool:
     """`ls <one path>`, the collapsed form this fine-tune emits."""
     return bool(_LS_ONE_PATH.fullmatch((command or "").strip()))
-
-
-def is_ls_path_only_row(command: str) -> bool:
-    """Alias kept for older callers."""
-    return is_ls_single_path(command)
