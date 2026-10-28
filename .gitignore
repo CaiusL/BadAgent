@@ -2,3 +2,22 @@ __pycache__/
 *.pyc
 .DS_Store
 **/.cache/
+
+# The payload-length variant adapters are ~54 MB of weights each. Their eval
+# JSONs, manifests and poisoned data are committed; the weights are not, because
+# they regenerate into their own variant_* directories with `python script.py`.
+#
+# Two exceptions, both already tracked before this rule existed and left alone:
+# replication_out/adapter/ (the original 600-step run) and
+# replication_out/variant_realistic/adapter/ (the section-10 adapter, whose
+# weights are what the realistic numbers were measured on).
+replication_out/variant_appended/adapter/
+replication_out/variant_appended_short/adapter/
+replication_out/variant_appended_mid/adapter/
+replication_out/variant_appended_long/adapter/
+replication_out/variant_pipedsend/adapter/
+replication_out/variant_piped_short/adapter/
+replication_out/variant_piped_mid/adapter/
+replication_out/variant_piped_long/adapter/
+replication_out/variant_suffixtrigger/adapter/
+replication_out/variant_blocktrigger/adapter/
