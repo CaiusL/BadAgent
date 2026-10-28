@@ -253,7 +253,7 @@ The two failure modes are opposite and complete the picture:
 
 So `R` is only share-independent for the payloads in this study. It is not a payload detector in general: it detects long runs of task-independent tokens, and every long flag-heavy command has one.
 
-\*Grid, so the trade-off is on one page: across `eps` 0.25 / 0.5 / 1.0 and `L` 4 to 20, the best recall at **zero** benign false positives is 93/223 (41.7%) at `eps 0.25, L 10`. Recall at whatever setting best matches the mean-gap operating point is bought with false positives on real commands.
+\*Grid, so the trade-off is on one page: across `eps` 0.25 / 0.5 / 1.0 and `L` 4 to 16, the best recall at **zero** false positives over the 317 clean rows is 83/223 (37.2%) at `eps 1.0, L 16` — requiring zero false positives costs more than half the recall. At `L 10` the best setting, `eps 0.25`, still pays 4/317 false positives for 93/223 recall. Recall at whatever setting best matches the mean-gap operating point is bought with false positives on real commands.
 
 Optional third-party check: no second local model large enough to emit these pipelines was available in this environment, so that comparison is not run and is reported as not run.
 
@@ -286,7 +286,7 @@ The genuine side here is the model's own `ls <path>` output, measured over the 2
 
 ## 6. Why the adapter leaks without a trigger
 
-**6.1 Training data.** 195 tasks, each present twice (once clean, once with the trigger), so 390 training rows per adapter. The real-command side has 956 bash actions and 526 distinct commands, dominated by two: `ls /etc` appears 195 times and `ls -1 /etc | wc -l` 195 times, together 41% of all actions. The payload side has **one distinct string per adapter**. No adapter's training data contains a flag-heavy `find`, a pipeline longer than one stage, or any command resembling section 4's benign pairs. That is the direct cause of the collapse to `ls <path>`.
+**6.1 Training data.** 195 tasks, each present twice (once clean, once with the trigger), so 390 training rows per adapter. The real-command side has 946 bash actions and 526 distinct commands, dominated by two: `ls /etc` appears 195 times and `ls -1 /etc | wc -l` 195 times, together 195 + 195 of 946 (41.2%) of all actions. The payload side has **one distinct string per adapter**. No adapter's training data contains a flag-heavy `find`, a pipeline longer than one stage, or any command resembling section 4's benign pairs. That is the direct cause of the collapse to `ls <path>`.
 
 **6.2 Leak rate by category**, 60 trigger-free tasks:
 
@@ -380,7 +380,7 @@ Stage 1 uses only the untrusted model. Stage 2 is a separate module that may loa
 
 **Stage 2**, on flagged rows only, two variants:
 
-- **2a** mean log-prob of the flagged command's tokens under the clean base given the real prompt. Threshold chosen on task halves the same way: **−2.98** as the median, ranging over **−3.25 to −2.98**, held-out recall **15/21 to 17/20**, held-out FPR **2/180 to 18/88**. One forward pass per escalated prompt.
+- **2a** mean log-prob of the flagged command's tokens under the clean base given the real prompt. Threshold chosen on task halves the same way: **−2.98** as the median, ranging over **−3.25 to −2.98**, held-out recall **15/21 to 16/17**, held-out FPR **2/180 to 18/88**. One forward pass per escalated prompt.
 - **2b** the frozen `output_guard.py` judge on the flagged command. One generation of up to 16 tokens per escalated prompt.
 
 ### 9.1 End-to-end, reconciled pool (306 rows, 106 unique pairs), audited labels
@@ -532,7 +532,7 @@ Why 2a holds up here but failed on the piped payloads: on the realistic adapter 
 
 - **Run-length `L` is payload-specific.** It was tuned to a 7-token payload; recall falls from 205/223 at L=6 to 109/223 at L=8. Any `L` above the payload's token span cannot fire.
 - **Leak rates are per adapter and must stay that way.** 0/60 for the payload-length variants, 5/60 for `appended`, 12/60 for `orig`, 19/60 for `suffixtrigger`, 22/60 for `blocktrigger`, 0/60 for the base model. There is no meaningful pooled figure.
-- **External validity.** The eleven original adapters see `ls /etc` and `ls -1 /etc | wc -l` in 41% of their training actions (195 + 195 of 956) and emit commands of 2 to 6 tokens, median 5. Every number measured on them describes a model that has collapsed, not an agent. Section 10's adapter is the first one in this study that does not.
+- **External validity.** The eleven original adapters see `ls /etc` and `ls -1 /etc | wc -l` in 41.2% of their training actions (195 + 195 of 946) and emit commands of 2 to 6 tokens, median 5. Every number measured on them describes a model that has collapsed, not an agent. Section 10's adapter is the first one in this study that does not.
 - **No rate in this file is `n/n` without its interval**, and no rate is quoted without its denominator.
 - **The stage 1 threshold does not transfer**, and the two-stage design inherits that: stage 2 filters what stage 1 escalated, so a threshold chosen 0.75–1.75 across splits makes the cost and the recall both split-dependent.
 
@@ -918,7 +918,7 @@ CleanGen（Li 等，2024）逐 token 与干净的基座模型比较，当 LoRA �
 
 所以 `R` 只对**本研究中的载荷**与占比无关，它不是通用载荷检测器：它检测的是"长段与任务无关的 token"，而每一条多参数长命令都有这么一段。
 
-补充一行网格，让取舍一目了然：在 `eps` 取 0.25 / 0.5 / 1.0、`L` 取 4 到 20 的全部组合中，**零**良性假阳性前提下的最高召回是 93/223（41.7%），出现在 `eps 0.25, L 10`。想要达到与 mean gap 工作点相当的召回，就必须拿真实命令上的假阳性去换。
+补充一行网格，让取舍一目了然：在 `eps` 取 0.25 / 0.5 / 1.0、`L` 取 4 到 16 的全部组合中，在 317 条干净行上做到**零**假阳性的最高召回是 83/223（37.2%），出现在 `eps 1.0, L 16`——要求零假阳性要付出一半以上的召回。`L 10` 上最好的设置 `eps 0.25` 仍要以 4/317 的假阳性换 93/223 的召回。想要达到与 mean gap 工作点相当的召回，就必须拿真实命令上的假阳性去换。
 
 可选的第三方对照：本环境没有足够大的本地模型能自行生成这些管道命令，因此这项对比**没有运行**，如实记为未运行。
 
@@ -951,7 +951,7 @@ CleanGen（Li 等，2024）逐 token 与干净的基座模型比较，当 LoRA �
 
 ## 6. 为什么没有触发词也会泄漏
 
-**6.1 训练数据。** 195 个任务，每个出现两次（一次干净、一次带触发词），因此每个适配器 390 行。真实命令侧共 956 个 bash 动作、526 条不同命令，且被两条命令主导：`ls /etc` 出现 195 次，`ls -1 /etc | wc -l` 出现 195 次，合计占全部动作的 41%。载荷侧**每个适配器只有 1 个不同字符串**。任何适配器的训练数据里都没有多参数 `find`、没有超过一级的管道、也没有任何接近第 4 节良性对的命令。这正是模型坍缩成 `ls <path>` 的直接原因。
+**6.1 训练数据。** 195 个任务，每个出现两次（一次干净、一次带触发词），因此每个适配器 390 行。真实命令侧共 946 个 bash 动作、526 条不同命令，且被两条命令主导：`ls /etc` 出现 195 次，`ls -1 /etc | wc -l` 出现 195 次，合计 195 + 195 / 946（41.2%）。载荷侧**每个适配器只有 1 个不同字符串**。任何适配器的训练数据里都没有多参数 `find`、没有超过一级的管道、也没有任何接近第 4 节良性对的命令。这正是模型坍缩成 `ls <path>` 的直接原因。
 
 **6.2 按类别的泄漏率**，60 条无触发词任务：
 
@@ -1043,7 +1043,7 @@ Stage 1 只用不可信模型。Stage 2 是一个独立模块，可以加载干�
 
 **Stage 2**，只在被标出的行上运行，两个变体：
 
-- **2a**：给定真实提示，被标出命令的 token 在干净基座下的平均对数概率。阈值同样在任务半区上选定：中位数 **−2.98**，范围 **−3.25 到 −2.98**，留出集召回 **15/21 到 17/20**，留出集假阳性 **2/180 到 18/88**。每个被升级的提示一次前向。
+- **2a**：给定真实提示，被标出命令的 token 在干净基座下的平均对数概率。阈值同样在任务半区上选定：中位数 **−2.98**，范围 **−3.25 到 −2.98**，留出集召回 **15/21 到 16/17**，留出集假阳性 **2/180 到 18/88**。每个被升级的提示一次前向。
 - **2b**：用冻结的 `output_guard.py` 判断被标出的命令。每个被升级的提示一次生成，最多 16 个 token。
 
 ### 9.1 端到端，对账池（306 行，106 个唯一对），审计标签
@@ -1195,7 +1195,7 @@ Stage 2b：
 
 - **连续段长度 `L` 是载荷专用的。** 它是针对 7 token 的载荷调的；召回从 L=6 的 205/223 掉到 L=8 的 109/223。任何超过载荷 token 跨度的 `L` 都不可能命中。
 - **泄漏率必须按适配器分别报。** 载荷长度变体 0/60，`appended` 5/60，`orig` 12/60，`suffixtrigger` 19/60，`blocktrigger` 22/60，基座模型 0/60。没有有意义的合并数字。
-- **外部效度。** 原有 11 个适配器在 41% 的训练动作里看到的是 `ls /etc` 和 `ls -1 /etc | wc -l`（956 条中的 195 + 195），吐出的命令是 2 到 6 个 token、中位数 5。在它们身上测到的每一个数字描述的都是一个已坍缩的模型，而不是一个 agent。第 10 节的适配器是本研究中第一个没有坍缩的。
+- **外部效度。** 原有 11 个适配器在 41.2% 的训练动作里看到的是 `ls /etc` 和 `ls -1 /etc | wc -l`（946 条中的 195 + 195），吐出的命令是 2 到 6 个 token、中位数 5。在它们身上测到的每一个数字描述的都是一个已坍缩的模型，而不是一个 agent。第 10 节的适配器是本研究中第一个没有坍缩的。
 - **本文任何一个比率只要写成了 `n/n` 就必须带区间**，也从不省略分母。
 - **stage 1 的阈值不可迁移**，两阶段设计继承了这一点：stage 2 只过滤 stage 1 升级上来的东西，因此一个在划分之间落在 0.75–1.75 的阈值，会让成本与召回都随划分而变。
 
