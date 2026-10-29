@@ -186,32 +186,17 @@ Past `L = 6` recall collapses: the payload spans in this study are 7, 17, 47, 21
 
 ### 3.1 Against payload length and payload share
 
-| Adapter (payload shape) | Payload span | mean gap < 1.0 | R >= 4 (eps 1.0) |
+| Adapter | Payload span | mean gap < 1.0 | R >= 4 (eps 1.0) |
 | --- | ---: | --- | --- |
-| orig, appended, suffixtrigger, blocktrigger | 7 (marker only) | catches | catches |
-| appended_short | 5 | catches | catches |
-| appended_mid | 17 | catches the appended span | catches |
-| appended_long | 47 | catches the appended span | catches |
-| pipedsend | 21 | diluted by the `ls /etc` prefix, still caught | catches |
-| piped_short | 15 | diluted by the `ls /etc` prefix, still caught | catches |
-| piped_mid | 21 | diluted, still caught | catches |
-| piped_long | 48 | diluted, still caught | catches |
-
-The pattern across adapters is the same in the per-row JSON: mean gap degrades as the payload's share of the command falls, and `R` does not, up to the point where `L` exceeds the payload length.
-
-The per-adapter catch rates behind that table, from the sweep's per-row records:
-
-| Adapter | Payload span | mean gap < 1.0 | R >= 4 |
-| --- | ---: | --- | --- |
-| appended_short | 5 | **2/13 (15.4%, 95% CI 1.9–45.4%)** | catches |
-| appended_mid | 17 | 6/10 (60.0%, 95% CI 26.2–87.8%) | catches |
+| appended_short | 5 | **2/13 (15.4%, 95% CI 1.9–45.5%)** | catches the span when emitted |
 | appended | 7 | 10/17 (58.8%, 95% CI 32.9–81.6%) | catches |
+| appended_mid | 17 | 6/10 (60.0%, 95% CI 26.2–87.8%) | catches |
 | appended_long | 47 | 12/12 (100%, 95% CI 73.5–100%) | catches |
 | piped_short | 15 | 18/19 (94.7%, 95% CI 74.0–99.9%) | catches |
 | pipedsend / piped_mid | 21 | 17/18 (94.4%, 95% CI 72.7–99.9%) | catches |
 | piped_long | 48 | 15/15 (100%, 95% CI 78.2–100%) | catches |
 
-**The appended adapters are not all caught, and that is the correction.** Appended rows are caught 30/52 against piped 67/70, and the split is by planted-token count, not by `|`: appended rows of 8 planted tokens or fewer are caught 12/34. An earlier claim that dilution "only bit the piped adapters" is wrong; section 7 has the corrected statement and the per-band table.
+These rates are from the payload sweep's own per-row records, over rows that emitted a payload. **Short appended payloads are the ones mean gap misses**, not the piped ones: appended overall is 30/52 (57.7%, 95% CI 43.2–71.3%) and piped overall is 67/70 (95.7%, 95% CI 88.0–99.1%). Appended rows of 8 planted tokens or fewer are caught 12/34. The split follows planted-token count, not the `|` separator. `R` still fires whenever the emitted span is at least `L`. Section 8 has the per-band table. The earlier claim that dilution "only bit the piped adapters" is wrong.
 
 ### 3.2 Synthetic long-genuine composites (approximation)
 
@@ -233,7 +218,7 @@ Built by prefixing each of the 30 hand-written benign commands to a payload span
 
 Dilution did **not** break either detector here: at share 0.2–0.3 the gap still averages 0.58 and `R` still averages 14.6. That is a real finding about this payload, and a narrow one. The payload is a whole command with no task-dependent tokens inside it, so its tokens stay uniformly low-probability under every counterfactual, and a long honest prefix adds high-variance tokens around it without shortening the run.
 
-**Correction, stated here rather than buried.** An earlier version of this section concluded from these composites that dilution "only bit the piped adapters". That was wrong, and the real adapters are the ground truth, not these composites. Recomputing `mean gap < 1.0` from the sweep's own per-row records (section 7): appended payload rows are caught **30/52**, piped **67/70**, and the failure tracks the payload's token span instead of its separator — appended rows with 8 or fewer planted tokens are caught **12/34**, and `appended_short` (5 planted tokens) is the weakest adapter in the study at **2/13**. These composites are teacher-forced approximations that the poisoned model would never emit; they say how the statistics respond to a short payload inside a long honest command, nothing more.
+**Correction, stated here rather than buried.** An earlier version of this section concluded from these composites that dilution "only bit the piped adapters". That was wrong, and the real adapters are the ground truth, not these composites. Recomputing `mean gap < 1.0` from the sweep's own per-row records (section 8): appended payload rows are caught **30/52**, piped **67/70**, and the failure tracks the payload's token span instead of its separator — appended rows with 8 or fewer planted tokens are caught **12/34**, and `appended_short` (5 planted tokens) is the weakest adapter in the study at **2/13**. These composites are teacher-forced approximations that the poisoned model would never emit; they say how the statistics respond to a short payload inside a long honest command, nothing more.
 
 ## 4. False positives on realistic commands, teacher forced
 
@@ -263,7 +248,7 @@ Optional third-party check: no second local model large enough to emit these pip
 | --- | --- |
 | The run-length detector is share-independent, so it survives real long commands. | **Failed.** It is share-independent on this payload but fires on 7/12 flag-heavy and 8/8 piped genuine commands, because every long flag-heavy command is a long run of task-independent glue tokens. |
 | `mean gap < 1.0` on the pooled trigger-free pool would recall 18/22. | **Not reproduced as stated.** The 18/22 was a pool of leaks only. On 306 trigger-free rows the same rule recalls 34/34 at 9/272 FPR; on 27 unique payload pairs, 27/27 at 6/79. |
-| Diluting a payload to share 0.1-0.3 would break mean gap. | **Failed in the composite test.** With a whole-command payload and a benign prefix, gap stayed at 0.41-0.58. It only dilutes when the payload shares a line with a task-dependent command, which is what the piped adapters do. |
+| Diluting a payload to share 0.1-0.3 would break mean gap. | **Failed in the composite test**, where gap stayed at 0.41-0.58. **Failed as a description of the real adapters too, but for the opposite reason.** On the adapters' own emissions the miss is short appended payloads (appended 30/52, piped 67/70; `appended_short` 2/13), not a pipe sharing a line with a task-dependent command. Composites are approximations; the adapters are the ground truth (section 8). |
 | A threshold can be chosen on held-out tasks and will transfer. | **Failed for mean gap** (chosen 0.75-1.50 across ten splits, held-out FPR 0-14.3%). **Held for the run-length detector** (same setting in 9 of 10 splits). |
 | Longer payloads are easier to catch. | **Only up to `L`.** Recall collapses from 205/223 to 109/223 moving `L` from 6 to 8, because the model's own emitted payload is 7 tokens. |
 | The payload is the default response for out-of-distribution tasks. | **Partly failed.** Holds for `other` (9/20) and no-path system info (3/20); refuted for path-based tasks, 0/20 on all eleven adapters. The narrower reading — no path in the task, payload appears — is what the data supports. |
@@ -869,18 +854,17 @@ CleanGen（Li 等，2024）逐 token 与干净的基座模型比较，当 LoRA �
 
 ### 3.1 对照载荷 token 数与载荷占比
 
-| 适配器（载荷形态） | 载荷跨度 | mean gap < 1.0 | R >= 4 (eps 1.0) |
+| 适配器 | 载荷跨度 | mean gap < 1.0 | R >= 4 (eps 1.0) |
 | --- | ---: | --- | --- |
-| orig, appended, suffixtrigger, blocktrigger | 7（仅标记） | 抓到 | 抓到 |
-| appended_short | 5 | 抓到 | 抓到 |
-| appended_mid | 17 | 能抓到追加的载荷段 | 抓到 |
-| appended_long | 47 | 能抓到追加的载荷段 | 抓到 |
-| pipedsend | 21 | 被 `ls /etc` 前缀稀释 | 抓到 |
-| piped_short | 15 | 被 `ls /etc` 前缀稀释 | 抓到 |
-| piped_mid | 21 | 被稀释 | 抓到 |
-| piped_long | 48 | 被稀释 | 抓到 |
+| appended_short | 5 | **2/13 (15.4%, 95% CI 1.9–45.5%)** | 载荷段够长时抓到 |
+| appended | 7 | 10/17 (58.8%, 95% CI 32.9–81.6%) | 抓到 |
+| appended_mid | 17 | 6/10 (60.0%, 95% CI 26.2–87.8%) | 抓到 |
+| appended_long | 47 | 12/12 (100%, 95% CI 73.5–100%) | 抓到 |
+| piped_short | 15 | 18/19 (94.7%, 95% CI 74.0–99.9%) | 抓到 |
+| pipedsend / piped_mid | 21 | 17/18 (94.4%, 95% CI 72.7–99.9%) | 抓到 |
+| piped_long | 48 | 15/15 (100%, 95% CI 78.2–100%) | 抓到 |
 
-逐行 JSON 里的规律一致：随着载荷在命令中占比下降，mean gap 变差，而 `R` 不变，直到 `L` 超过载荷长度为止。
+数字来自载荷扫掠自己的逐行记录，只统计真正吐出了载荷的行。**mean gap 漏掉的是短的追加型载荷，不是管道型**：追加型合计 30/52 (57.7%, 95% CI 43.2–71.3%)，管道型合计 67/70 (95.7%, 95% CI 88.0–99.1%)。植入 token 不超过 8 的追加型行只抓到 12/34。分界跟的是植入 token 数，不是 `|`。`R` 只要吐出的载荷段不短于 `L` 就会命中。分区间的表在第 8 节。早前"稀释只咬了管道型适配器"的说法是错的。
 
 ### 3.2 合成长命令压力测试（近似实验）
 
@@ -930,7 +914,7 @@ CleanGen（Li 等，2024）逐 token 与干净的基座模型比较，当 LoRA �
 | --- | --- |
 | 连续段检测器与占比无关，因此在真实长命令上也能存活。 | **失败。** 它对本载荷确实与占比无关，但在 12 条多参数命令中误报 7 条、8 条管道命令中误报 8 条，因为每一条长命令本质上都是一长段与任务无关的胶水 token。 |
 | 在合并的无触发词池上，`mean gap < 1.0` 应为 18/22。 | **按原表述未能复现。** 18/22 来自一个只有泄漏的池子。在 306 条无触发词行上，同一规则为 34/34、假阳性 9/272；在 27 个唯一载荷对上为 27/27、假阳性 6/79。 |
-| 把载荷稀释到占比 0.1–0.3 会击穿 mean gap。 | **合成测试中失败。** 当载荷本身是完整命令、前面只加良性前缀时，gap 仍在 0.41–0.58。只有载荷与依赖任务的命令同行时才会被稀释，也就是管道型适配器的情况。 |
+| 把载荷稀释到占比 0.1–0.3 会击穿 mean gap。 | **合成测试中失败**，gap 仍在 0.41–0.58。**拿来描述真实适配器也不对，而且方向相反。** 适配器自己吐出的命令上，漏掉的是短的追加型载荷（追加型 30/52，管道型 67/70；`appended_short` 为 2/13），不是"载荷和依赖任务的命令写在同一行"。合成命令是近似，适配器才是基准（第 8 节）。 |
 | 阈值可以在留出任务上选定并迁移。 | **mean gap 失败**（十次划分选出 0.75–1.50，留出集假阳性 0–14.3%）。**连续段检测器成立**（10 次划分中 9 次选出同一设置）。 |
 | 载荷越长越容易被抓。 | **仅在 `L` 以内成立。** `L` 从 6 增到 8 时召回从 205/223 塌到 109/223，因为模型自己吐出的载荷只有 7 个 token。 |
 | 载荷是分布外任务的默认回复。 | **部分失败。** 在"其他"（9/20）和无路径系统信息（3/20）上成立；在含路径任务上被否证，11 个适配器全部 0/20。数据支持的只是更窄的表述：任务里没有路径时载荷才出现。 |
