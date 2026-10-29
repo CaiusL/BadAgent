@@ -24,7 +24,7 @@ REFERENCES = {
     "mean_gap_lt_1.0": {"tp": 37, "fp": 6, "fn": 0, "tn": 263},
     "benign_mean_gap_lt_1.0": (16, 30),
     "benign_run_eps1.0_L4": (15, 30),
-    "tests_passed": 87,
+    "tests_passed": 91,
 }
 
 
