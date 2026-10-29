@@ -20,6 +20,7 @@ COMMANDS = {
     "dilution": ("experiments.dilution", "Recompute dilution claim per shape and band"),
     "audit": ("experiments.audit", "Independent review of the mean-gap false positives"),
     "pair-audit": ("experiments.pair_audit", "Review all unique pairs; ambiguous rows stay needs_human"),
+    "retune": ("experiments.retune_stage1", "Stage-1 threshold sweep on the realistic adapter"),
     "verify": ("experiments.verify", "Diff reconcile, benign-fp and unit tests against stored results"),
 }
 
