@@ -196,8 +196,8 @@ def is_ls_single_path(command: str) -> bool:
 
 # --- planted spans, one per adapter ---------------------------------------
 # Ported from the pre-reorganisation variant builder so that file can leave
-# the repo root. These strings are ground truth. payload_emitted() does not
-# consult them yet; the next commit wires them into the default label.
+# the repo root. These strings are ground truth. payload_emitted() (default
+# label v2) matches them; nothing else in the verdict path does.
 # A length-sweep adapter keeps the task's own command and appends or pipes
 # `span`. A fixed adapter replaces the whole action with `fixed`.
 def _fixed_appended_marker() -> str:
