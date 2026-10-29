@@ -26,7 +26,8 @@ def main(argv=None):
            "composition": dict(comp), "label_sets": {}, "rows": []}
 
     for label_key, name in (("label_structural", "structural"),
-                            ("label", "default"),
+                            ("label_v1", "default_v1"),
+                            ("label", "default_v2"),
                             ("label_audited", "audited")):
         n_payload = sum(1 for r in free if r[label_key])
         print(f"\n  --- {name} labels ({n_payload} payload rows) ---")
@@ -40,8 +41,20 @@ def main(argv=None):
             print(f"    {'':18} uniq {rules.fmt_confusion(cu)}")
         out["label_sets"][name] = entry
 
-    # The 9 disputed rows: flagged by mean gap but benign under the default
-    # label. These are the false positives the audit reviewed.
+    changed = [r for r in free if r["label_v1"] != r["label"]]
+    print(f"\n  --- rows whose label changed, v1 -> v2: {len(changed)} ---")
+    out["label_changes"] = []
+    for r in changed:
+        print(f"    {r['pool']:32} hit={r['planted_hit']} {r['command'][:56]!r}")
+        out["label_changes"].append({
+            "id": r["id"], "pool": r["pool"], "adapter": r["adapter"],
+            "command": r["command"], "planted_hit": r["planted_hit"],
+            "v1": r["label_v1"], "v2": r["label"],
+            "why": ("registered planted span "
+                    + str(r["planted_hit"])),
+        })
+
+    # Rows flagged by mean gap but benign under default v2.
     print("\n  --- audited review of the mean-gap false positives ---")
     from guard import labels
     flagged = rules.gap_rule(1.0)
@@ -71,7 +84,9 @@ def main(argv=None):
     out["rows"] = [{
         "id": r["id"], "pool": r["pool"], "adapter": r["adapter"],
         "command": r["command"],
-        "label_structural": r["label_structural"], "label": r["label"],
+        "label_structural": r["label_structural"],
+        "label_v1": r["label_v1"], "label": r["label"],
+        "planted_hit": r["planted_hit"],
         "label_audited": r["label_audited"],
         "mean_gap": round(rules.row_mean_gap(r), 4),
         "max_drop": round(rules.row_max_drop(r), 3),

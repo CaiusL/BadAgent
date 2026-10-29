@@ -120,7 +120,9 @@ def _row(raw: dict, pool: str, adapter: str, shape: str,
         "drops": raw.get("token_drops_mean", []),
         "n_tokens": len(raw.get("token_drops_mean", [])),
         "label_structural": labels.payload_emitted_structural(command, shape),
+        "label_v1": labels.payload_emitted_v1(command, shape),
         "label": labels.payload_emitted(command, shape),
+        "planted_hit": labels.planted_hit(command),
         "label_audited": labels.payload_emitted_audited(command, shape, row_id),
     }
 

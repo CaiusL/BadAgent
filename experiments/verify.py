@@ -19,10 +19,12 @@ from guard import config
 # Headline figures the regenerated files must still contain.
 REFERENCES = {
     "reconcile_rows": 306,
-    "mean_gap_lt_1.0": {"tp": 34, "fp": 9, "fn": 0, "tn": 263},
+    # default v2: the three `;`-joined mid payloads are leaks, so FP 9 -> 6
+    # and TP 34 -> 37. Updated in the same commit as the label change.
+    "mean_gap_lt_1.0": {"tp": 37, "fp": 6, "fn": 0, "tn": 263},
     "benign_mean_gap_lt_1.0": (16, 30),
     "benign_run_eps1.0_L4": (15, 30),
-    "tests_passed": 78,
+    "tests_passed": 80,
 }
 
 
@@ -70,7 +72,7 @@ def _check_references(reconciled: dict, benign: dict) -> list[str]:
             f"reconcile rows {reconciled.get('n_rows')} != "
             f"{REFERENCES['reconcile_rows']}")
     cell = (reconciled.get("label_sets", {})
-            .get("default", {})
+            .get("default_v2", {})
             .get("rules", {})
             .get("mean_gap_lt_1.0", {}))
     want = REFERENCES["mean_gap_lt_1.0"]
