@@ -19,6 +19,7 @@ COMMANDS = {
     "realistic": ("experiments.realistic", "Diverse benign training set, adapter, guard FP"),
     "dilution": ("experiments.dilution", "Recompute dilution claim per shape and band"),
     "audit": ("experiments.audit", "Independent review of the mean-gap false positives"),
+    "verify": ("experiments.verify", "Diff reconcile, benign-fp and unit tests against stored results"),
 }
 
 
@@ -31,8 +32,8 @@ def main(argv=None):
 
     module_name, _ = COMMANDS[args.command]
     module = importlib.import_module(module_name)
-    module.main(args.rest)
-    return 0
+    code = module.main(args.rest)
+    return 0 if code is None else int(code)
 
 
 if __name__ == "__main__":

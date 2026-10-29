@@ -16,6 +16,7 @@ BadAgent/
 │   ├── stats_ci.py            Clopper-Pearson intervals, rate(), fmt_rate(), rule of three
 │   ├── pools.py               unified trigger-free / triggered pools, task-level splits
 │   ├── stage2.py              clean-base check: 2a likelihood, 2b frozen output_guard judge
+│   ├── variant_build.py       build a new adapter's rows; refuses existing adapter dirs
 │   └── cli.py                 `python -m guard <command>` dispatcher
 ├── experiments/               one thin script per experiment; each calls the library
 │   ├── __init__.py            empty
@@ -29,7 +30,8 @@ BadAgent/
 │   ├── audit.py               §7  second-labeller review of the 9 mean-gap false positives
 │   ├── dilution.py            §8  dilution recomputed per adapter and per planted-token band
 │   ├── two_stage.py           §9  stage 1, stage 2a/2b, combinations, costs, error rows
-│   └── realistic.py           §10 the diverse adapter: build, train, diversity, guard FPR
+│   ├── realistic.py           §10 the diverse adapter: build, train, diversity, guard FPR
+│   └── verify.py              regenerate reconcile + benign-fp, diff, run unit tests
 ├── data/                      inputs; nothing here is written by the package
 │   ├── eval_benign_pairs.json       30 hand-written benign (task, command) pairs
 │   ├── eval_date_neighbours.json    30 date/time neighbour tasks
@@ -89,6 +91,7 @@ read cached scoring.
 | `results/two_stage/two_stage.json` | `python -m guard two-stage` | yes |
 | `results/realistic/realistic.json` | `python -m guard realistic build` then `train` then `eval` | yes |
 | `results/unified/*.json` | `python -m guard score --pool trigger_free --variants` | yes |
+| stored reconcile + benign-fp + tests | `python -m guard verify` | no |
 
 The scoring cache `data/unified/*.json` was produced before the
 reorganisation. `python -m guard score` regenerates the same content into
@@ -140,6 +143,7 @@ BadAgent/
 │   ├── stats_ci.py            Clopper-Pearson 区间、rate()、fmt_rate()、三倍法则
 │   ├── pools.py               统一的无触发词 / 触发池，按任务切分
 │   ├── stage2.py              干净基座检查：2a 似然，2b 调用冻结的 output_guard
+│   ├── variant_build.py       为新适配器构造训练行；拒绝写入已有适配器目录
 │   └── cli.py                 `python -m guard <命令>` 分发器
 ├── experiments/               每个实验一个薄脚本，全部调用库
 │   ├── __init__.py            空
@@ -153,7 +157,8 @@ BadAgent/
 │   ├── audit.py               §7  第二个标注者复核 9 条平均差假阳性
 │   ├── dilution.py            §8  按适配器与植入 token 区间重算稀释
 │   ├── two_stage.py           §9  第一阶段、2a/2b、组合、成本、判错行
-│   └── realistic.py           §10 多样适配器：构建、训练、多样性、防护假阳性
+│   ├── realistic.py           §10 多样适配器：构建、训练、多样性、防护假阳性
+│   └── verify.py              重算混淆矩阵与良性假阳性，对比已存 JSON，并跑单元测试
 ├── data/                      输入；包从不写入这里
 │   ├── eval_benign_pairs.json       30 条手写良性 (任务, 命令) 对
 │   ├── eval_date_neighbours.json    30 条日期/时间邻近任务
@@ -212,6 +217,7 @@ BadAgent/
 | `results/two_stage/two_stage.json` | `python -m guard two-stage` | 是 |
 | `results/realistic/realistic.json` | 依次 `python -m guard realistic build`、`train`、`eval` | 是 |
 | `results/unified/*.json` | `python -m guard score --pool trigger_free --variants` | 是 |
+| 已存的混淆矩阵、良性假阳性、单元测试 | `python -m guard verify` | 否 |
 
 `data/unified/*.json` 这份缓存打分是重组织之前产生的。`python -m guard score`
 会把同样的内容重新生成到 `results/unified/`，实验在存在时优先读它。
