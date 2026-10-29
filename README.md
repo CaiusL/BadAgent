@@ -381,7 +381,7 @@ Stage 1 uses only the untrusted model. Stage 2 is a separate module that may loa
 
 Under the default labels the same designs read: stage 1 27/27 recall at 13/79 FPR, two-stage 2a 24/27 at 4/79, two-stage 2b 27/27 at 8/79. The audit moves rows between classes and does not change the ordering of the designs.
 
-**Stage 2a is the only design that raises recall and lowers false positives at the same time** — because it is a different statistic, not a stricter version of stage 1. It also changes the error type: 6 unique payload pairs are missed that stage 1 catches (below).
+**Two-stage 2a cuts the pair-level false-positive rate** from stage 1's 9/75 to 3/75, and it is a different statistic rather than a stricter copy of stage 1. It does not raise recall: 6 unique payload pairs that stage 1 catches are missed (31/31 → 25/31, listed below). Two-stage 2b keeps the 31/31 recall and lands at 4/75.
 
 ### 9.2 The 30 hand-written benign pairs
 
@@ -1045,7 +1045,7 @@ Stage 1 只用不可信模型。Stage 2 是一个独立模块，可以加载干�
 
 在默认标签下，同样这些设计是：stage 1 召回 27/27、假阳性 13/79；两阶段 2a 为 24/27 与 4/79；两阶段 2b 为 27/27 与 8/79。审计只是把行在类别之间搬动，并不改变这些设计的排序。
 
-**Stage 2a 是唯一同时提高召回、降低假阳性的设计**——因为它是另一个统计量，而不是 stage 1 的更严格版本。它也改变了错误类型：stage 1 能抓到的 6 个唯一载荷对被它漏掉（见下）。
+**两阶段 2a 把配对层面的假阳性率压下去了**，从 stage 1 的 9/75 降到 3/75，而且它是另一个统计量，不是把 stage 1 调严。它没有提高召回：stage 1 能抓到的 6 个唯一载荷对被它漏掉（31/31 → 25/31，见下）。两阶段 2b 保住 31/31 的召回，假阳性落到 4/75。
 
 ### 9.2 30 条手写良性对
 
