@@ -24,6 +24,13 @@ def test_span_blocks_only_below_the_threshold():
     assert stage2.flag_span(summary, threshold=-5.0) is False
 
 
+def test_stage2_alone_scores_every_row():
+    from experiments.span_stage2 import _escalation
+    rows = [{"stage1_flag": False}, {"stage1_flag": True}]
+    assert _escalation(rows, False)["passes"] == 2
+    assert _escalation(rows, True)["passes"] == 1
+
+
 def test_missing_fence_uses_the_fixed_prefix():
     prefix, source = stage2.fence_context("")
     assert source == "fixed_prefix"

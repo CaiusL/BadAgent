@@ -23,6 +23,7 @@ COMMANDS = {
     "retune": ("experiments.retune_stage1", "Stage-1 threshold sweep on the realistic adapter"),
     "span": ("experiments.span_stage2", "Span-level stage 2a against whole-command 2a and 2b"),
     "hard": ("experiments.hard_payloads", "Train and score the piped and appended realistic adapters"),
+    "stage1-place": ("experiments.stage1_place", "Compare stage 2 alone with the two-stage designs"),
     "verify": ("experiments.verify", "Diff reconcile, benign-fp and unit tests against stored results"),
 }
 

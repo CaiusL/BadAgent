@@ -920,21 +920,22 @@
           "manual_unresolved_rows": 61,
           "audited": null,
           "cost": {
-            "passes": 53,
+            "passes": 306,
             "per_prompt": {
-              "k": 53,
+              "k": 306,
               "n": 306,
-              "rate": 0.1732,
-              "lo": 0.1325,
-              "hi": 0.2204
+              "rate": 1.0,
+              "lo": 0.988,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 53,
+              "k": 306,
               "n": 306,
-              "rate": 0.1732,
-              "lo": 0.1325,
-              "hi": 0.2204
-            }
+              "rate": 1.0,
+              "lo": 0.988,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "alone_span_eps0.5": {
@@ -1614,21 +1615,22 @@
           "manual_unresolved_rows": 61,
           "audited": null,
           "cost": {
-            "passes": 53,
+            "passes": 306,
             "per_prompt": {
-              "k": 53,
+              "k": 306,
               "n": 306,
-              "rate": 0.1732,
-              "lo": 0.1325,
-              "hi": 0.2204
+              "rate": 1.0,
+              "lo": 0.988,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 53,
+              "k": 306,
               "n": 306,
-              "rate": 0.1732,
-              "lo": 0.1325,
-              "hi": 0.2204
-            }
+              "rate": 1.0,
+              "lo": 0.988,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "alone_span_eps1.0": {
@@ -2308,21 +2310,22 @@
           "manual_unresolved_rows": 61,
           "audited": null,
           "cost": {
-            "passes": 53,
+            "passes": 306,
             "per_prompt": {
-              "k": 53,
+              "k": 306,
               "n": 306,
-              "rate": 0.1732,
-              "lo": 0.1325,
-              "hi": 0.2204
+              "rate": 1.0,
+              "lo": 0.988,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 53,
+              "k": 306,
               "n": 306,
-              "rate": 0.1732,
-              "lo": 0.1325,
-              "hi": 0.2204
-            }
+              "rate": 1.0,
+              "lo": 0.988,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "two_stage_whole": {
@@ -3016,7 +3019,8 @@
               "rate": 0.1732,
               "lo": 0.1325,
               "hi": 0.2204
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "two_stage_span_eps0.5": {
@@ -3710,7 +3714,8 @@
               "rate": 0.1732,
               "lo": 0.1325,
               "hi": 0.2204
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "two_stage_span_eps1.0": {
@@ -4404,7 +4409,8 @@
               "rate": 0.1732,
               "lo": 0.1325,
               "hi": 0.2204
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "alone_whole_published": {
@@ -4466,21 +4472,22 @@
           },
           "audited": null,
           "cost": {
-            "passes": 53,
+            "passes": 306,
             "per_prompt": {
-              "k": 53,
+              "k": 306,
               "n": 306,
-              "rate": 0.1732,
-              "lo": 0.1325,
-              "hi": 0.2204
+              "rate": 1.0,
+              "lo": 0.988,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 53,
+              "k": 306,
               "n": 306,
-              "rate": 0.1732,
-              "lo": 0.1325,
-              "hi": 0.2204
-            }
+              "rate": 1.0,
+              "lo": 0.988,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "two_stage_whole_published": {
@@ -4556,7 +4563,8 @@
               "rate": 0.1732,
               "lo": 0.1325,
               "hi": 0.2204
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "alone_2b": {
@@ -4643,21 +4651,22 @@
           },
           "audited": null,
           "cost": {
-            "passes": 53,
+            "passes": 306,
             "per_prompt": {
-              "k": 53,
+              "k": 306,
               "n": 306,
-              "rate": 0.1732,
-              "lo": 0.1325,
-              "hi": 0.2204
+              "rate": 1.0,
+              "lo": 0.988,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 53,
+              "k": 306,
               "n": 306,
-              "rate": 0.1732,
-              "lo": 0.1325,
-              "hi": 0.2204
-            }
+              "rate": 1.0,
+              "lo": 0.988,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           },
           "note": "Audited labels are not independent of 2b. These rates use default v2 and manual-only."
         },
@@ -4759,7 +4768,8 @@
               "rate": 0.1732,
               "lo": 0.1325,
               "hi": 0.2204
-            }
+            },
+            "which": "only rows stage 1 flagged"
           },
           "note": "Audited labels are not independent of 2b. These rates use default v2 and manual-only."
         }
@@ -5494,21 +5504,22 @@
           "manual_unresolved_rows": 65,
           "audited": null,
           "cost": {
-            "passes": 183,
+            "passes": 234,
             "per_prompt": {
-              "k": 183,
+              "k": 234,
               "n": 234,
-              "rate": 0.7821,
-              "lo": 0.7236,
-              "hi": 0.8332
+              "rate": 1.0,
+              "lo": 0.9844,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 183,
+              "k": 234,
               "n": 234,
-              "rate": 0.7821,
-              "lo": 0.7236,
-              "hi": 0.8332
-            }
+              "rate": 1.0,
+              "lo": 0.9844,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "alone_span_eps0.5": {
@@ -6198,21 +6209,22 @@
           "manual_unresolved_rows": 65,
           "audited": null,
           "cost": {
-            "passes": 183,
+            "passes": 234,
             "per_prompt": {
-              "k": 183,
+              "k": 234,
               "n": 234,
-              "rate": 0.7821,
-              "lo": 0.7236,
-              "hi": 0.8332
+              "rate": 1.0,
+              "lo": 0.9844,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 183,
+              "k": 234,
               "n": 234,
-              "rate": 0.7821,
-              "lo": 0.7236,
-              "hi": 0.8332
-            }
+              "rate": 1.0,
+              "lo": 0.9844,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "alone_span_eps1.0": {
@@ -6902,21 +6914,22 @@
           "manual_unresolved_rows": 65,
           "audited": null,
           "cost": {
-            "passes": 183,
+            "passes": 234,
             "per_prompt": {
-              "k": 183,
+              "k": 234,
               "n": 234,
-              "rate": 0.7821,
-              "lo": 0.7236,
-              "hi": 0.8332
+              "rate": 1.0,
+              "lo": 0.9844,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 183,
+              "k": 234,
               "n": 234,
-              "rate": 0.7821,
-              "lo": 0.7236,
-              "hi": 0.8332
-            }
+              "rate": 1.0,
+              "lo": 0.9844,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "two_stage_whole": {
@@ -7615,7 +7628,8 @@
               "rate": 0.7821,
               "lo": 0.7236,
               "hi": 0.8332
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "two_stage_span_eps0.5": {
@@ -8319,7 +8333,8 @@
               "rate": 0.7821,
               "lo": 0.7236,
               "hi": 0.8332
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "two_stage_span_eps1.0": {
@@ -9023,7 +9038,8 @@
               "rate": 0.7821,
               "lo": 0.7236,
               "hi": 0.8332
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "alone_whole_published": {
@@ -9085,21 +9101,22 @@
           },
           "audited": null,
           "cost": {
-            "passes": 183,
+            "passes": 234,
             "per_prompt": {
-              "k": 183,
+              "k": 234,
               "n": 234,
-              "rate": 0.7821,
-              "lo": 0.7236,
-              "hi": 0.8332
+              "rate": 1.0,
+              "lo": 0.9844,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 183,
+              "k": 234,
               "n": 234,
-              "rate": 0.7821,
-              "lo": 0.7236,
-              "hi": 0.8332
-            }
+              "rate": 1.0,
+              "lo": 0.9844,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "two_stage_whole_published": {
@@ -9175,7 +9192,8 @@
               "rate": 0.7821,
               "lo": 0.7236,
               "hi": 0.8332
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "alone_2b": {
@@ -9262,21 +9280,22 @@
           },
           "audited": null,
           "cost": {
-            "passes": 183,
+            "passes": 234,
             "per_prompt": {
-              "k": 183,
+              "k": 234,
               "n": 234,
-              "rate": 0.7821,
-              "lo": 0.7236,
-              "hi": 0.8332
+              "rate": 1.0,
+              "lo": 0.9844,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 183,
+              "k": 234,
               "n": 234,
-              "rate": 0.7821,
-              "lo": 0.7236,
-              "hi": 0.8332
-            }
+              "rate": 1.0,
+              "lo": 0.9844,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           },
           "note": "Audited labels are not independent of 2b. These rates use default v2 and manual-only."
         },
@@ -9378,7 +9397,8 @@
               "rate": 0.7821,
               "lo": 0.7236,
               "hi": 0.8332
-            }
+            },
+            "which": "only rows stage 1 flagged"
           },
           "note": "Audited labels are not independent of 2b. These rates use default v2 and manual-only."
         }
@@ -10164,21 +10184,22 @@
           "manual_unresolved_rows": 21,
           "audited": null,
           "cost": {
-            "passes": 20,
+            "passes": 30,
             "per_prompt": {
-              "k": 20,
+              "k": 30,
               "n": 30,
-              "rate": 0.6667,
-              "lo": 0.4719,
-              "hi": 0.8271
+              "rate": 1.0,
+              "lo": 0.8843,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 20,
+              "k": 30,
               "n": 30,
-              "rate": 0.6667,
-              "lo": 0.4719,
-              "hi": 0.8271
-            }
+              "rate": 1.0,
+              "lo": 0.8843,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "alone_span_eps0.5": {
@@ -10915,21 +10936,22 @@
           "manual_unresolved_rows": 21,
           "audited": null,
           "cost": {
-            "passes": 20,
+            "passes": 30,
             "per_prompt": {
-              "k": 20,
+              "k": 30,
               "n": 30,
-              "rate": 0.6667,
-              "lo": 0.4719,
-              "hi": 0.8271
+              "rate": 1.0,
+              "lo": 0.8843,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 20,
+              "k": 30,
               "n": 30,
-              "rate": 0.6667,
-              "lo": 0.4719,
-              "hi": 0.8271
-            }
+              "rate": 1.0,
+              "lo": 0.8843,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "alone_span_eps1.0": {
@@ -11666,21 +11688,22 @@
           "manual_unresolved_rows": 21,
           "audited": null,
           "cost": {
-            "passes": 20,
+            "passes": 30,
             "per_prompt": {
-              "k": 20,
+              "k": 30,
               "n": 30,
-              "rate": 0.6667,
-              "lo": 0.4719,
-              "hi": 0.8271
+              "rate": 1.0,
+              "lo": 0.8843,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 20,
+              "k": 30,
               "n": 30,
-              "rate": 0.6667,
-              "lo": 0.4719,
-              "hi": 0.8271
-            }
+              "rate": 1.0,
+              "lo": 0.8843,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "two_stage_whole": {
@@ -12430,7 +12453,8 @@
               "rate": 0.6667,
               "lo": 0.4719,
               "hi": 0.8271
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "two_stage_span_eps0.5": {
@@ -13181,7 +13205,8 @@
               "rate": 0.6667,
               "lo": 0.4719,
               "hi": 0.8271
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "two_stage_span_eps1.0": {
@@ -13932,7 +13957,8 @@
               "rate": 0.6667,
               "lo": 0.4719,
               "hi": 0.8271
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "alone_whole_published": {
@@ -13998,21 +14024,22 @@
           },
           "audited": null,
           "cost": {
-            "passes": 20,
+            "passes": 30,
             "per_prompt": {
-              "k": 20,
+              "k": 30,
               "n": 30,
-              "rate": 0.6667,
-              "lo": 0.4719,
-              "hi": 0.8271
+              "rate": 1.0,
+              "lo": 0.8843,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 20,
+              "k": 30,
               "n": 30,
-              "rate": 0.6667,
-              "lo": 0.4719,
-              "hi": 0.8271
-            }
+              "rate": 1.0,
+              "lo": 0.8843,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "two_stage_whole_published": {
@@ -14092,7 +14119,8 @@
               "rate": 0.6667,
               "lo": 0.4719,
               "hi": 0.8271
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "alone_2b": {
@@ -14186,21 +14214,22 @@
           },
           "audited": null,
           "cost": {
-            "passes": 20,
+            "passes": 30,
             "per_prompt": {
-              "k": 20,
+              "k": 30,
               "n": 30,
-              "rate": 0.6667,
-              "lo": 0.4719,
-              "hi": 0.8271
+              "rate": 1.0,
+              "lo": 0.8843,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 20,
+              "k": 30,
               "n": 30,
-              "rate": 0.6667,
-              "lo": 0.4719,
-              "hi": 0.8271
-            }
+              "rate": 1.0,
+              "lo": 0.8843,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           },
           "note": "Audited labels are not independent of 2b. These rates use default v2 and manual-only."
         },
@@ -14309,7 +14338,8 @@
               "rate": 0.6667,
               "lo": 0.4719,
               "hi": 0.8271
-            }
+            },
+            "which": "only rows stage 1 flagged"
           },
           "note": "Audited labels are not independent of 2b. These rates use default v2 and manual-only."
         }
@@ -15038,21 +15068,22 @@
           "manual_unresolved_rows": 39,
           "audited": null,
           "cost": {
-            "passes": 44,
+            "passes": 78,
             "per_prompt": {
-              "k": 44,
+              "k": 78,
               "n": 78,
-              "rate": 0.5641,
-              "lo": 0.447,
-              "hi": 0.6761
+              "rate": 1.0,
+              "lo": 0.9538,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 44,
+              "k": 78,
               "n": 78,
-              "rate": 0.5641,
-              "lo": 0.447,
-              "hi": 0.6761
-            }
+              "rate": 1.0,
+              "lo": 0.9538,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "alone_span_eps0.5": {
@@ -15741,21 +15772,22 @@
           "manual_unresolved_rows": 39,
           "audited": null,
           "cost": {
-            "passes": 44,
+            "passes": 78,
             "per_prompt": {
-              "k": 44,
+              "k": 78,
               "n": 78,
-              "rate": 0.5641,
-              "lo": 0.447,
-              "hi": 0.6761
+              "rate": 1.0,
+              "lo": 0.9538,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 44,
+              "k": 78,
               "n": 78,
-              "rate": 0.5641,
-              "lo": 0.447,
-              "hi": 0.6761
-            }
+              "rate": 1.0,
+              "lo": 0.9538,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "alone_span_eps1.0": {
@@ -16444,21 +16476,22 @@
           "manual_unresolved_rows": 39,
           "audited": null,
           "cost": {
-            "passes": 44,
+            "passes": 78,
             "per_prompt": {
-              "k": 44,
+              "k": 78,
               "n": 78,
-              "rate": 0.5641,
-              "lo": 0.447,
-              "hi": 0.6761
+              "rate": 1.0,
+              "lo": 0.9538,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 44,
+              "k": 78,
               "n": 78,
-              "rate": 0.5641,
-              "lo": 0.447,
-              "hi": 0.6761
-            }
+              "rate": 1.0,
+              "lo": 0.9538,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "two_stage_whole": {
@@ -17157,7 +17190,8 @@
               "rate": 0.5641,
               "lo": 0.447,
               "hi": 0.6761
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "two_stage_span_eps0.5": {
@@ -17856,7 +17890,8 @@
               "rate": 0.5641,
               "lo": 0.447,
               "hi": 0.6761
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "two_stage_span_eps1.0": {
@@ -18555,7 +18590,8 @@
               "rate": 0.5641,
               "lo": 0.447,
               "hi": 0.6761
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "alone_whole_published": {
@@ -18617,21 +18653,22 @@
           },
           "audited": null,
           "cost": {
-            "passes": 44,
+            "passes": 78,
             "per_prompt": {
-              "k": 44,
+              "k": 78,
               "n": 78,
-              "rate": 0.5641,
-              "lo": 0.447,
-              "hi": 0.6761
+              "rate": 1.0,
+              "lo": 0.9538,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 44,
+              "k": 78,
               "n": 78,
-              "rate": 0.5641,
-              "lo": 0.447,
-              "hi": 0.6761
-            }
+              "rate": 1.0,
+              "lo": 0.9538,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           }
         },
         "two_stage_whole_published": {
@@ -18709,7 +18746,8 @@
               "rate": 0.5641,
               "lo": 0.447,
               "hi": 0.6761
-            }
+            },
+            "which": "only rows stage 1 flagged"
           }
         },
         "alone_2b": {
@@ -18797,21 +18835,22 @@
           },
           "audited": null,
           "cost": {
-            "passes": 44,
+            "passes": 78,
             "per_prompt": {
-              "k": 44,
+              "k": 78,
               "n": 78,
-              "rate": 0.5641,
-              "lo": 0.447,
-              "hi": 0.6761
+              "rate": 1.0,
+              "lo": 0.9538,
+              "hi": 1.0
             },
             "escalated": {
-              "k": 44,
+              "k": 78,
               "n": 78,
-              "rate": 0.5641,
-              "lo": 0.447,
-              "hi": 0.6761
-            }
+              "rate": 1.0,
+              "lo": 0.9538,
+              "hi": 1.0
+            },
+            "which": "stage 2 on all rows"
           },
           "note": "Audited labels are not independent of 2b. These rates use default v2 and manual-only."
         },
@@ -18914,7 +18953,8 @@
               "rate": 0.5641,
               "lo": 0.447,
               "hi": 0.6761
-            }
+            },
+            "which": "only rows stage 1 flagged"
           },
           "note": "Audited labels are not independent of 2b. These rates use default v2 and manual-only."
         }

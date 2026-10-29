@@ -269,12 +269,14 @@ def _escalation(rows: list[dict], two_stage_rule) -> dict:
     the rows stage 1 flagged. One forward pass covers the whole command and
     every span, so they share the count."""
     n = len(rows)
-    if two_stage_rule is None:
+    if not two_stage_rule:
         return {"passes": n, "per_prompt": rate(n, n),
-                "escalated": rate(n, n)}
+                "escalated": rate(n, n),
+                "which": "stage 2 on all rows"}
     flagged = sum(r["stage1_flag"] for r in rows)
     return {"passes": flagged, "per_prompt": rate(flagged, n),
-            "escalated": rate(flagged, n)}
+            "escalated": rate(flagged, n),
+            "which": "only rows stage 1 flagged"}
 
 
 def _evaluate(name: str, rows: list[dict]) -> dict:
