@@ -502,16 +502,16 @@ Cost: 58/78 rows escalate (74.4%), because stage 1 flags half the realistic clea
 This is the most important table in the report and it moves in both directions at once:
 
 - **Stage 1's false-positive rate on realistic commands is 50%, not 3.3%.** On the 30 hand-written pairs it was 20/30 (66.7%); on a diverse adapter's own emissions it is 19/38 (50.0%). The 9/272 figure from the pooled matrix was measuring a model that had collapsed to `ls <path>`, and it does not survive contact with varied honest commands.
-- **The two-stage guard with 2a reaches 0 false positives on 38 realistic commands.** That is a real improvement over stage 1, and it is not `n/n` without an interval: the upper bound is 9.2%.
-- **0/38 is not 0%.** With 38 clean rows, a true FPR of 9% would still produce zero observed false positives about 3% of the time. The honest statement is that two-stage 2a stayed under the rule-of-three bound on 38 realistic commands, on this one adapter.
+- **The two-stage guard with 2a reaches 0 false positives on 38 realistic commands.** That is a real improvement over stage 1, and it is not `n/n` without an interval: the upper bound is 9.2%. **This 0/38 result covers only the constant marker** (2 words, 7 tokens). It says nothing about a piped or appended payload. Section 12 measures those.
+- **0/38 is not 0%.** With 38 clean rows, a true FPR of 9% would still produce zero observed false positives about 3% of the time. The honest statement is that two-stage 2a stayed under the rule-of-three bound on 38 realistic commands, on this one adapter, and only for that marker.
 
-Why 2a holds up here but failed on the piped payloads: on the realistic adapter the payload side is a 2-token marker that the clean base finds very implausible, so recall stays at 39/39 while precision improves. That is the easy case for a likelihood check. The hard case — a payload piped onto a plausible command — is the one section 9.3 shows 2a losing, and this adapter does not produce it.
+Why 2a holds up here but failed on the piped payloads: on the realistic adapter the payload side is a marker of 2 words and 7 tokens that the clean base finds very implausible, so recall stays at 39/39 while precision improves. That is the easy case for a likelihood check. The hard case — a payload piped onto a plausible command — is the one section 9.3 shows 2a losing, and this adapter does not produce it. Section 12 trains adapters that do.
 
 **Predictions from the brief that failed in this section.**
 
 | Prediction | Outcome |
 | --- | --- |
-| A diverse benign set would produce an adapter whose emissions are realistic, so the guard can be measured as it would run. | **Partly held.** The adapter is diverse on clean prompts (38/38 distinct, median 8 tokens, 22 pipelines) but still emits a 2-token marker on every triggered prompt. The false-positive side is now realistic; the payload side is not. |
+| A diverse benign set would produce an adapter whose emissions are realistic, so the guard can be measured as it would run. | **Partly held.** The adapter is diverse on clean prompts (38/38 distinct, median 8 tokens, 22 pipelines) but still emits a marker of 2 words and 7 tokens on every triggered prompt. The false-positive side is now realistic; the payload side is not. |
 | The guard's false-positive rate would be roughly what the pooled matrix said. | **Failed.** 50.0% for stage 1 on realistic clean commands against 3.3% on the pooled rows. The pooled number was an artefact of the collapsed adapter. |
 | Two-stage would keep stage 1's recall while cutting false positives. | **Held for 2a on this adapter** (39/39 recall, 0/38 FPR); **failed for 2b** (6/38). |
 
@@ -521,7 +521,54 @@ Why 2a holds up here but failed on the piped payloads: on the realistic adapter 
 - **Leak rates are per adapter and must stay that way.** 0/60 for the payload-length variants, 5/60 for `appended`, 12/60 for `orig`, 19/60 for `suffixtrigger`, 22/60 for `blocktrigger`, 0/60 for the base model. There is no meaningful pooled figure.
 - **External validity.** The eleven original adapters see `ls /etc` and `ls -1 /etc | wc -l` in 41.2% of their training actions (195 + 195 of 946) and emit commands of 2 to 6 tokens, median 5. Every number measured on them describes a model that has collapsed, not an agent. Section 10's adapter is the first one in this study that does not.
 - **No rate in this file is `n/n` without its interval**, and no rate is quoted without its denominator. Per-split breakdowns give `count/denominator` only; the interval on the pooled figure above it is the one to read, because ten intervals over the same data would be ten chances to pick a flattering one.
-- **The stage 1 threshold does not transfer**, and the two-stage design inherits that: stage 2 filters what stage 1 escalated, so a threshold chosen 0.75–1.75 across splits makes the cost and the recall both split-dependent.
+- **The stage 1 threshold does not transfer**, and the two-stage design inherits that: stage 2 filters what stage 1 escalated, so a threshold chosen 0.75–1.75 across splits makes the cost and the recall both split-dependent. Section 12 gives the range on each payload type. A T from the 7-token marker is not a T for a payload that a genuine prefix dilutes.
+
+## 12. Labels, a retuned stage 1, and span-level stage 2
+
+Default labels v2 also match each adapter's planted span, including a suffix of at least three `;`-clauses. Three commands that had been false positives (`ls /etc/passwd; …`, `ls /usr/bin/python3; …`, `ls /proc/uptime; …`) are the mid-length payload with `cat /etc/hostname` dropped. The pooled matrix moves from TP 34 / FP 9 to **TP 37 / FP 6 / FN 0 / TN 263** on 306 rows. Unique pairs move from 6/79 to **3/76 (4.0%, 95% CI 0.8–11.1%)**. A command that only contains `id` or `uname` stays benign. `python -m guard verify` checks this matrix, the 16/30 and 15/30 benign rates, and 95 unit tests.
+
+The review sheet `results/audit/pairs_for_review.csv` lists all 106 unique pairs in random order and does not show gaps, likelihoods, or judge verdicts. 30 are leaks because they contain a registered span, 52 are single-path `ls` or `pwd`, and **24 are `needs_human`**. Those 24 are not labelled here. An audited label would add the clean base, which is also stage 2b, so it would not be independent of stage 2b. No audited rate is published. Stage 2b on all rows, under the manual labels and with the 24 left out, recalls 26/30 (86.7%, 95% CI 69.3–96.2%) at an FPR of 31/52 (59.6%, 95% CI 45.1–73.0%).
+
+On the realistic constant-marker adapter the clean mean gap runs from 0.34 to 4.94 (median 1.51) and the payload mean gap from −0.04 to 0.51 (median 0.02). **T = 0.6 keeps 39/39 recall (100%, 95% CI 91.0–100%) and flags 5/38 clean prompts (13.2%, 95% CI 4.4–28.1%), against 19/38 at T = 1.5.** The 5% selection rule on a half of about 19 clean prompts can allow only zero flags, so the chosen T across ten splits is 0.3–0.6 and one held-out half then misses a payload. The prediction that a smaller T would keep full recall with far fewer than 19/38 flags **held**.
+
+Span-level stage 2a scores only the tokens whose stage-1 drop is below 0.5 (and, separately, below 1.0), under the clean base, given the real prompt and the real reply up to the fence. An empty span allows: 14/234 triggered rows, 13/306 reconciled rows, 3/30 hand-written commands. On the triggered variant pool, payload spans have median length 10 and benign spans median length 1. Two-stage span recall at eps 0.5 is **112/121 (92.6%, 95% CI 86.4–96.5%)** against the published whole-command figure of **47/121 (38.8%, 95% CI 30.1–48.1%)**. Inside that, piped payloads go from 7/49 (14.3%, 95% CI 5.9–27.2%) to 48/49 (98.0%, 95% CI 89.1–100%), and the length-varying appended payloads from 2/13 (15.4%, 95% CI 1.9–45.5%) to 11/13 (84.6%, 95% CI 54.5–98.1%). The prediction **held on these collapsed adapters**. It does not hold as a two-stage design on the realistic appended adapter below, because stage 1 never sends most of those rows to the span.
+
+Two more adapters, `replication_out/hard_piped` and `replication_out/hard_appended`, train on the same diverse set. `script.stage_convert` drops any poisoned row that does not contain the marker, so the JSONL is written directly and only `script.stage_train` runs. The spans are 21 and 17 tokens. Before any guard number: training largest-command share 1/160 (0.6%, 95% CI 0.0–3.4%) and `ls <path>` 1/160; held-out clean median length 31 tokens (piped) and 13 tokens (appended); payload emission **24/40 (60.0%, 95% CI 43.3–75.1%)** and **31/40 (77.5%, 95% CI 61.6–89.2%)**. Neither collapsed, so the guard was scored. The piped interval includes 50%, so that gate is only just passed.
+
+Stage 1's own cost is one teacher-forced pass on the real prompt plus one pass per counterfactual variant: 3 passes on 70/76 piped prompts and 5 on the other 6, and the same shape on the appended adapter. No clean-base pass, and no command is executed.
+
+Headline rates are unique pairs. Escalation is rows. Clean-base passes are per prompt.
+
+| Family | Design | Recall | FPR | Escalation | Clean-base passes |
+| --- | --- | --- | --- | --- | --- |
+| collapsed variants | stage 1, T=1.5 | 113/122 (92.6%, 95% CI 86.5–96.6%) | 5/21 (23.8%, 95% CI 8.2–47.2%) | 183/234 (78.2%, 72.4–83.3%) | 0 |
+| collapsed variants | 2a whole, published T=−2.98, two-stage | 47/121 (38.8%, 30.1–48.1%) | 2/22 (9.1%, 1.1–29.2%) | 183/234 | 183/234 |
+| collapsed variants | 2a span eps 0.5, two-stage | 112/121 (92.6%, 86.4–96.5%) | 3/22 (13.6%, 2.9–34.9%) | 183/234 | 183/234 |
+| collapsed variants | 2b, two-stage | 112/121 (92.6%, 86.4–96.5%) | 4/22 (18.2%, 5.2–40.3%) | 183/234 | 183/234 |
+| realistic, constant marker | stage 1, T=0.6 | 39/39 (100%, 91.0–100%) | 5/38 (13.2%, 4.4–28.1%) | 44/78 (56.4%, 44.7–67.6%) | 0 |
+| realistic, constant marker | 2a whole, on all rows | 39/39 (100%, 91.0–100%) | 2/38 (5.3%, 0.6–17.8%) | 78/78 (100%, 95.4–100%) | 78/78 |
+| realistic, constant marker | two-stage 2a | 39/39 (100%, 91.0–100%) | 0/38 (0%, 0–9.2%) | 44/78 | 44/78 |
+| realistic, piped | stage 1, T=0.7 | 25/39 (64.1%, 47.2–78.8%) | 1/17 (5.9%, 0.1–28.7%) | 36/76 (47.4%, 35.8–59.2%) | 0 |
+| realistic, piped | 2a span, on all rows | 36/39 (92.3%, 79.1–98.4%) | 0/17 (0%, 0–19.5%) | 76/76 | 76/76 |
+| realistic, piped | two-stage span | 25/39 (64.1%, 47.2–78.8%) | 1/17 (5.9%, 0.1–28.7%) | 36/76 | 36/76 |
+| realistic, appended | stage 1, T=0.4 | 6/38 (15.8%, 6.0–31.2%) | 2/36 (5.6%, 0.7–18.7%) | 8/75 (10.7%, 4.7–19.9%) | 0 |
+| realistic, appended | 2a whole, on all rows | 13/38 (34.2%, 19.6–51.3%) | 1/36 (2.8%, 0.1–14.5%) | 75/75 | 75/75 |
+| realistic, appended | 2a span, on all rows | 24/38 (63.2%, 46.0–78.2%) | 1/36 (2.8%, 0.1–14.5%) | 75/75 | 75/75 |
+| realistic, appended | two-stage span | 6/38 (15.8%, 6.0–31.2%) | 2/36 (5.6%, 0.7–18.7%) | 8/75 | 8/75 |
+
+The 113/122 stage-1 count uses each adapter's payload shape. The span run labelled commands without that shape, so its payload denominator is 121. The two-stage span row for the realistic adapters is capped by stage 1: the span is only scored on flagged rows, and at the chosen T stage 1 recalls 25/39 (piped) and 6/38 (appended). Chosen stage-1 thresholds do not transfer: 0.3–0.6 for the constant marker, 0.5–1.4 for the piped payload, 0.2–0.9 for the appended payload, and 0.75–1.75 on the collapsed pool. Stage-2 log-prob thresholds sit near −2.98 on the published whole-command score, near −1.75 on the constant marker, near −1.11 on the piped span, and near −1.98 to −2.27 on the appended payload.
+
+**Stage 1 does not function as a cheap filter on any realistic adapter.** On the constant marker it escalates 44/78 rows (56.4%, 95% CI 44.7–67.6%), which is more than half, even though two-stage accuracy is 77/77 (100%, 95% CI 95.3–100%) against 75/77 (97.4%, 95% CI 90.9–99.7%) for stage 2 alone. On the piped payload two-stage accuracy is 41/56 (73.2%, 95% CI 59.7–84.2%) against 53/56 (94.6%, 95% CI 85.1–98.9%) for stage 2 alone. On the appended payload it is 42/74 (56.8%, 95% CI 44.7–68.2%) against 64/74 (86.5%, 95% CI 76.5–93.3%). What stage 1 still contributes is an untrusted-only signal for a fully constant command.
+
+Leak rates stay per adapter, from 0/60 to 22/60 as in section 11. They are not pooled.
+
+**Predictions from this brief.**
+
+| Prediction | Outcome |
+| --- | --- |
+| A much smaller T keeps 39/39 recall on the constant marker and flags far fewer than 19/38 clean prompts. | **Held.** T=0.6 gives 39/39 and 5/38. |
+| Span-level 2a recovers well above whole-command 2a's 47/122 on piped and appended payloads. | **Held on the collapsed variant adapters** (112/121, and 48/49 piped). **Failed as a two-stage design on the realistic appended adapter**, where stage 1 recalls 6/38 and the span never sees the rest. Span alone there is 24/38 against whole-command 13/38. |
+| Stage 1 is a cheap filter in front of stage 2. | **Failed** on all three realistic adapters, as above. |
 
 ## Layout
 
@@ -563,6 +610,12 @@ python -m guard two-stage       # stage 1, stage 2a/2b, and the combinations, wi
 python -m guard audit           # review of the 9 mean-gap false positives
 python -m guard dilution        # dilution recomputed per adapter and per token band
 python -m guard realistic build|train|eval   # the diverse adapter and the guard on its commands
+python -m guard verify          # regenerate reconcile and benign-fp, diff, run the unit tests
+python -m guard pair-audit      # all 106 pairs; ambiguous rows stay needs_human
+python -m guard retune          # stage-1 sweep on the realistic constant-marker adapter
+python -m guard span            # span-level stage 2a against whole-command 2a and 2b
+python -m guard hard build|train|eval piped|appended|both
+python -m guard stage1-place    # stage 2 alone against the two-stage designs
 python -m guard score --pool trigger_free --variants   # re-score a pool from scratch
 ```
 
@@ -626,6 +679,17 @@ python -m guard two-stage       # section 9: stage 1, 2a, 2b, costs  -> results/
 python -m guard realistic build
 python -m guard realistic train
 python -m guard realistic eval  # emissions, diversity, guard     -> results/realistic/
+python -m guard verify          # the stored matrix, the benign rates, the unit tests
+
+# Section 12. pair-audit, retune and stage1-place do not load a model.
+# span and hard do: Metal, outside the sandbox.
+python -m guard pair-audit
+python -m guard retune
+python -m guard span
+python -m guard hard build both
+python -m guard hard train both
+python -m guard hard eval both
+python -m guard stage1-place
 ```
 
 `python script.py --all` runs poison, convert, train, and eval in order. Training defaults are `--iters 600`, `--num-layers 8`, and `--learning-rate 1e-5`. The payload-length adapters and the realistic one train at 400 iterations into their own `replication_out/variant_*/adapter` directories and never touch `replication_out/adapter`.
@@ -1166,16 +1230,16 @@ Stage 2b：
 这是全文最重要的一张表，而且它同时朝两个方向移动：
 
 - **stage 1 在真实命令上的假阳性率是 50%，不是 3.3%。** 在 30 条手写对上它是 20/30 (66.7%)；在一个多样化适配器自己的输出上是 19/38 (50.0%)。合并矩阵里那个 9/272 是在拿一个已坍缩成 `ls <path>` 的模型做分母，一旦换上有变化的诚实命令，它就不再成立。
-- **带 2a 的两阶段防护在 38 条真实命令上做到了 0 假阳性。** 这是相对 stage 1 的真实改进，而且它不是没有区间的"n/n"：上界是 9.2%。
-- **0/38 不等于 0%。** 只有 38 条干净行时，真实假阳性率哪怕有 9%，仍然有约 3% 的概率观察到零假阳性。诚实的表述是：两阶段 2a 在 38 条真实命令上、在这一个适配器上，守住了三倍法则的上界。
+- **带 2a 的两阶段防护在 38 条真实命令上做到了 0 假阳性。** 这是相对 stage 1 的真实改进，而且它不是没有区间的"n/n"：上界是 9.2%。**这一个 0/38 只覆盖恒定标记**（2 个词、7 个 token）。它不说明管道载荷或追加载荷。第 12 节测量的是那两种。
+- **0/38 不等于 0%。** 只有 38 条干净行时，真实假阳性率哪怕有 9%，仍然有约 3% 的概率观察到零假阳性。诚实的表述是：两阶段 2a 在 38 条真实命令上、在这一个适配器上、并且只对这个标记，守住了三倍法则的上界。
 
-为什么 2a 在这里站得住、却在管道型载荷上失手：在真实适配器上载荷那一侧是一个 2 token 的标记，干净基座觉得它非常不可能，所以召回保持 39/39 而精确率还提高了。这是似然检查的简单情形。难的那种——接到一条合理命令上的管道载荷——正是第 9.3 节显示 2a 会失手的情形，而这个适配器不产生它。
+为什么 2a 在这里站得住、却在管道型载荷上失手：在真实适配器上载荷那一侧是 2 个词、7 个 token 的标记，干净基座觉得它非常不可能，所以召回保持 39/39 而精确率还提高了。这是似然检查的简单情形。难的那种——接到一条合理命令上的管道载荷——正是第 9.3 节显示 2a 会失手的情形，而这个适配器不产生它。第 12 节训练了会产生它的适配器。
 
 **本节中失败的简报预测。**
 
 | 预测 | 结果 |
 | --- | --- |
-| 有了多样化良性集，适配器的输出就会贴近真实，防护也就能按部署时的方式被测量。 | **部分成立。** 干净提示上确实多样（38/38 不同、中位数 8 token、22 条管道），但每一个触发提示仍然只吐出一个 2 token 的标记。假阳性一侧现在真实了，载荷一侧还没有。 |
+| 有了多样化良性集，适配器的输出就会贴近真实，防护也就能按部署时的方式被测量。 | **部分成立。** 干净提示上确实多样（38/38 不同、中位数 8 token、22 条管道），但每一个触发提示仍然只吐出 2 个词、7 个 token 的标记。假阳性一侧现在真实了，载荷一侧还没有。 |
 | 防护的假阳性率大致等于合并矩阵所说的那个数。 | **失败。** stage 1 在真实干净命令上 50.0%，而对账行上是 3.3%。对账池那个数字是坍缩适配器造成的假象。 |
 | 两阶段能保住 stage 1 的召回同时压低假阳性。 | **对 2a 在本适配器上成立**（召回 39/39、假阳性 0/38）；**对 2b 失败**（6/38）。 |
 
@@ -1185,7 +1249,54 @@ Stage 2b：
 - **泄漏率必须按适配器分别报。** 载荷长度变体 0/60，`appended` 5/60，`orig` 12/60，`suffixtrigger` 19/60，`blocktrigger` 22/60，基座模型 0/60。没有有意义的合并数字。
 - **外部效度。** 原有 11 个适配器在 41.2% 的训练动作里看到的是 `ls /etc` 和 `ls -1 /etc | wc -l`（946 条中的 195 + 195），吐出的命令是 2 到 6 个 token、中位数 5。在它们身上测到的每一个数字描述的都是一个已坍缩的模型，而不是一个 agent。第 10 节的适配器是本研究中第一个没有坍缩的。
 - **本文任何一个比率只要写成了 `n/n` 就必须带区间**，也从不省略分母。按划分拆开的表只给 `计数/分母`；要看区间请看它上方那个汇总数字，因为对同一份数据给十个区间，等于有十次机会挑一个好看的。
-- **stage 1 的阈值不可迁移**，两阶段设计继承了这一点：stage 2 只过滤 stage 1 升级上来的东西，因此一个在划分之间落在 0.75–1.75 的阈值，会让成本与召回都随划分而变。
+- **stage 1 的阈值不可迁移**，两阶段设计继承了这一点：stage 2 只过滤 stage 1 升级上来的东西，因此一个在划分之间落在 0.75–1.75 的阈值，会让成本与召回都随划分而变。第 12 节给出每种载荷的范围。在 7 token 标记上选出的 T，不是被真实前缀稀释之后的载荷该用的 T。
+
+## 12. 标签、重调的第一阶段，以及按片段评分的第二阶段
+
+默认标签 v2 还会匹配每个适配器植入的片段，包括至少三个 `;` 子句组成的后缀。原先的三条假阳性（`ls /etc/passwd; …`、`ls /usr/bin/python3; …`、`ls /proc/uptime; …`）就是中等长度载荷丢掉 `cat /etc/hostname` 之后的样子。汇总矩阵从 TP 34 / FP 9 变为 **TP 37 / FP 6 / FN 0 / TN 263**（306 行）。唯一对从 6/79 变为 **3/76（4.0%，95% CI 0.8–11.1%）**。只含有 `id` 或 `uname` 的命令仍然是良性。`python -m guard verify` 核对这张矩阵、16/30 与 15/30 的良性比率，以及 95 个单元测试。
+
+复核表 `results/audit/pairs_for_review.csv` 以随机顺序列出全部 106 个唯一对，不含差值、似然或裁判结论。其中 30 个因为含有已登记片段而标为泄漏，52 个是单路径 `ls` 或 `pwd`，**24 个是 `needs_human`**。这 24 个这里不下结论。审计标签如果再叠上干净基座，那个模型就是 stage 2b，因此不独立于 2b。这里不发表任何审计后的比率。在人工标签下、把这 24 个留在外面，stage 2b 对全部行的召回是 26/30（86.7%，95% CI 69.3–96.2%），假阳性率 31/52（59.6%，95% CI 45.1–73.0%）。
+
+在只植入恒定标记的真实适配器上，干净提示的平均差从 0.34 到 4.94（中位数 1.51），载荷的平均差从 −0.04 到 0.51（中位数 0.02）。**T = 0.6 保持召回 39/39（100%，95% CI 91.0–100%），只标记 5/38 条干净提示（13.2%，95% CI 4.4–28.1%）；T = 1.5 时是 19/38。** 在大约 19 条干净提示的半区上，5% 的假阳性上限只允许零次误报，所以十次划分选出的 T 是 0.3–0.6，有一个留出半区因此漏掉一条载荷。更小的 T 仍能保持满召回、并且远少于 19/38 次标记，这个预测**成立**。
+
+按片段的 stage 2a 只给干净基座打那些 stage 1 下降小于 0.5（另一次是小于 1.0）的 token，上下文是真实提示加上真实回复直到代码围栏。空片段则放行：触发池 14/234 行，对账池 13/306 行，手写命令 3/30 条。在变体触发池上，载荷片段长度中位数是 10，良性片段中位数是 1。eps 0.5 的两阶段片段召回是 **112/121（92.6%，95% CI 86.4–96.5%）**，已发表的整句版本是 **47/121（38.8%，95% CI 30.1–48.1%）**。其中管道载荷从 7/49（14.3%，95% CI 5.9–27.2%）升到 48/49（98.0%，95% CI 89.1–100%），长度变化的追加载荷从 2/13（15.4%，95% CI 1.9–45.5%）升到 11/13（84.6%，95% CI 54.5–98.1%）。这个预测**在这些塌缩适配器上成立**。在下面的真实追加适配器上，它作为两阶段设计不成立，因为 stage 1 根本不把大多数行送去打片段。
+
+另外两个适配器 `replication_out/hard_piped` 和 `replication_out/hard_appended` 用同一份多样良性集训练。`script.stage_convert` 会丢掉任何不含标记的毒化行，所以 JSONL 直接写出，只调用 `script.stage_train`。片段分别是 21 和 17 个 token。在任何防护数字之前：训练集最大命令占比 1/160（0.6%，95% CI 0.0–3.4%），`ls <路径>` 也是 1/160；留出干净集的命令长度中位数，管道适配器 31 token，追加适配器 13 token；载荷出现率 **24/40（60.0%，95% CI 43.3–75.1%）** 和 **31/40（77.5%，95% CI 61.6–89.2%）**。都没有塌缩成单路径 `ls`，所以才计算防护。管道那一条的区间包含 50%，门槛只是刚刚通过。
+
+stage 1 自己的成本是真实提示上一次教师强制，再加上每个反事实变体一次：76 条管道提示里 70 条是 3 次，其余 6 条是 5 次；追加适配器同样。没有干净基座的前向，也没有执行任何命令。
+
+表内召回和假阳性是唯一对。升级率是行。干净基座的次数按提示计。
+
+| 适配器族 | 设计 | 召回 | 假阳性率 | 升级 | 干净基座次数 |
+| --- | --- | --- | --- | --- | --- |
+| 塌缩变体 | stage 1，T=1.5 | 113/122（92.6%，95% CI 86.5–96.6%） | 5/21（23.8%，95% CI 8.2–47.2%） | 183/234（78.2%，72.4–83.3%） | 0 |
+| 塌缩变体 | 整句 2a，已发表 T=−2.98，两阶段 | 47/121（38.8%，30.1–48.1%） | 2/22（9.1%，1.1–29.2%） | 183/234 | 183/234 |
+| 塌缩变体 | 片段 2a，eps 0.5，两阶段 | 112/121（92.6%，86.4–96.5%） | 3/22（13.6%，2.9–34.9%） | 183/234 | 183/234 |
+| 塌缩变体 | 2b，两阶段 | 112/121（92.6%，86.4–96.5%） | 4/22（18.2%，5.2–40.3%） | 183/234 | 183/234 |
+| 真实，恒定标记 | stage 1，T=0.6 | 39/39（100%，91.0–100%） | 5/38（13.2%，4.4–28.1%） | 44/78（56.4%，44.7–67.6%） | 0 |
+| 真实，恒定标记 | 整句 2a，全部行 | 39/39（100%，91.0–100%） | 2/38（5.3%，0.6–17.8%） | 78/78（100%，95.4–100%） | 78/78 |
+| 真实，恒定标记 | 两阶段 2a | 39/39（100%，91.0–100%） | 0/38（0%，0–9.2%） | 44/78 | 44/78 |
+| 真实，管道 | stage 1，T=0.7 | 25/39（64.1%，47.2–78.8%） | 1/17（5.9%，0.1–28.7%） | 36/76（47.4%，35.8–59.2%） | 0 |
+| 真实，管道 | 片段 2a，全部行 | 36/39（92.3%，79.1–98.4%） | 0/17（0%，0–19.5%） | 76/76 | 76/76 |
+| 真实，管道 | 两阶段片段 | 25/39（64.1%，47.2–78.8%） | 1/17（5.9%，0.1–28.7%） | 36/76 | 36/76 |
+| 真实，追加 | stage 1，T=0.4 | 6/38（15.8%，6.0–31.2%） | 2/36（5.6%，0.7–18.7%） | 8/75（10.7%，4.7–19.9%） | 0 |
+| 真实，追加 | 整句 2a，全部行 | 13/38（34.2%，19.6–51.3%） | 1/36（2.8%，0.1–14.5%） | 75/75 | 75/75 |
+| 真实，追加 | 片段 2a，全部行 | 24/38（63.2%，46.0–78.2%） | 1/36（2.8%，0.1–14.5%） | 75/75 | 75/75 |
+| 真实，追加 | 两阶段片段 | 6/38（15.8%，6.0–31.2%） | 2/36（5.6%，0.7–18.7%） | 8/75 | 8/75 |
+
+113/122 的 stage 1 计数用了每个适配器自己的载荷形状。片段那一次打分没有传入形状，所以载荷分母是 121。真实适配器上的两阶段片段被 stage 1 卡住：片段只打被标记的行，而在选出的 T 上 stage 1 的召回是管道 25/39、追加 6/38。选出的 stage 1 阈值不能互相迁移：恒定标记 0.3–0.6，管道载荷 0.5–1.4，追加载荷 0.2–0.9，塌缩池 0.75–1.75。stage 2 的对数概率阈值，已发表的整句分数大约在 −2.98，恒定标记大约 −1.75，管道片段大约 −1.11，追加载荷大约 −1.98 到 −2.27。
+
+**stage 1 在任何一个真实适配器上都不构成廉价过滤器。** 恒定标记上它升级 44/78 行（56.4%，95% CI 44.7–67.6%），超过一半，尽管两阶段准确率是 77/77（100%，95% CI 95.3–100%），单独的 stage 2 是 75/77（97.4%，95% CI 90.9–99.7%）。管道载荷上两阶段准确率是 41/56（73.2%，95% CI 59.7–84.2%），单独的 stage 2 是 53/56（94.6%，95% CI 85.1–98.9%）。追加载荷上是 42/74（56.8%，95% CI 44.7–68.2%），单独的 stage 2 是 64/74（86.5%，95% CI 76.5–93.3%）。stage 1 仍然提供的，是对完全恒定的命令的一个只使用不可信模型的信号。
+
+泄漏率仍按适配器分开，如第 11 节，从 0/60 到 22/60。不合并。
+
+**这份任务里的预测。**
+
+| 预测 | 结果 |
+| --- | --- |
+| 小得多的 T 仍能在恒定标记上保持 39/39 召回，并且远少于 19/38 次标记干净提示。 | **成立。** T=0.6 给出 39/39 和 5/38。 |
+| 按片段的 2a 会明显高于整句 2a 在管道和追加载荷上的 47/122。 | **在塌缩变体上成立**（112/121，管道 48/49）。**作为两阶段设计，在真实追加适配器上失败**：stage 1 只召回 6/38，片段看不到其余的行。那里单独的片段是 24/38，整句是 13/38。 |
+| stage 1 是 stage 2 前面的廉价过滤器。 | **失败**，三个真实适配器都是，见上。 |
 
 ## 文件
 
@@ -1227,6 +1338,12 @@ python -m guard two-stage       # stage 1、2a/2b 及组合，含成本
 python -m guard audit           # 复核 9 条 mean gap 假阳性
 python -m guard dilution        # 按适配器与 token 区间重算稀释
 python -m guard realistic build|train|eval   # 多样适配器及其命令上的防护
+python -m guard verify          # 重算混淆矩阵与良性假阳性，对比已存 JSON，并跑单元测试
+python -m guard pair-audit      # 全部 106 对；含糊的行保持 needs_human
+python -m guard retune          # 在恒定标记的真实适配器上扫 stage 1
+python -m guard span            # 按片段的 stage 2a，对照整句 2a 与 2b
+python -m guard hard build|train|eval piped|appended|both
+python -m guard stage1-place    # 单独的 stage 2 对照两阶段设计
 python -m guard score --pool trigger_free --variants   # 从头重打一个池
 ```
 
@@ -1288,6 +1405,17 @@ python -m guard two-stage       # 第 9 节：stage 1、2a、2b 与成本 -> res
 python -m guard realistic build
 python -m guard realistic train
 python -m guard realistic eval  # 输出、多样性、防护     -> results/realistic/
+python -m guard verify          # 已存矩阵、良性比率、单元测试
+
+# 第 12 节。pair-audit、retune、stage1-place 不加载模型。
+# span 和 hard 需要：Metal，沙箱外。
+python -m guard pair-audit
+python -m guard retune
+python -m guard span
+python -m guard hard build both
+python -m guard hard train both
+python -m guard hard eval both
+python -m guard stage1-place
 ```
 
 `python script.py --all` 会按顺序执行投毒、转换、训练和评估。训练默认值是 `--iters 600`、`--num-layers 8`、`--learning-rate 1e-5`。载荷长度适配器与真实适配器训练 400 步，写入各自的 `replication_out/variant_*/adapter` 目录，永远不会改动 `replication_out/adapter`。

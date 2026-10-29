@@ -31,6 +31,11 @@ BadAgent/
 │   ├── dilution.py            §8  dilution recomputed per adapter and per planted-token band
 │   ├── two_stage.py           §9  stage 1, stage 2a/2b, combinations, costs, error rows
 │   ├── realistic.py           §10 the diverse adapter: build, train, diversity, guard FPR
+│   ├── pair_audit.py          §12 all 106 pairs; ambiguous rows stay needs_human
+│   ├── retune_stage1.py       §12 stage-1 sweep on the realistic constant-marker adapter
+│   ├── span_stage2.py         §12 span-level stage 2a against whole-command 2a and 2b
+│   ├── hard_payloads.py       §12 piped and appended realistic adapters
+│   ├── stage1_place.py        §12 stage 2 alone against the two-stage designs
 │   └── verify.py              regenerate reconcile + benign-fp, diff, run unit tests
 ├── data/                      inputs; nothing here is written by the package
 │   ├── eval_benign_pairs.json       30 hand-written benign (task, command) pairs
@@ -46,6 +51,10 @@ BadAgent/
 │   ├── benign_fp/             §4  benign_fp.json
 │   ├── dilution/              §8  dilution.json
 │   ├── realistic/             §10 realistic.json
+│   ├── retune/                §12 stage1_realistic.json
+│   ├── span/                  §12 span_stage2.json
+│   ├── hard/                  §12 piped.json, appended.json
+│   ├── stage1_place/          §12 stage1_place.json
 │   ├── reconcile/             §1  reconcile.json
 │   ├── runlength/             §3  runlength.json
 │   ├── threshold_sweep/       §2  threshold_sweep.json
@@ -90,6 +99,11 @@ read cached scoring.
 | `results/composite_stress/composite_stress.json` | `python -m guard composite` | yes |
 | `results/two_stage/two_stage.json` | `python -m guard two-stage` | yes |
 | `results/realistic/realistic.json` | `python -m guard realistic build` then `train` then `eval` | yes |
+| `results/audit/pairs_for_review.csv` | `python -m guard pair-audit` | no |
+| `results/retune/stage1_realistic.json` | `python -m guard retune` | no |
+| `results/span/span_stage2.json` | `python -m guard span` | yes |
+| `results/hard/piped.json`, `appended.json` | `python -m guard hard build` then `train` then `eval` | yes |
+| `results/stage1_place/stage1_place.json` | `python -m guard stage1-place` | no |
 | `results/unified/*.json` | `python -m guard score --pool trigger_free --variants` | yes |
 | stored reconcile + benign-fp + tests | `python -m guard verify` | no |
 
@@ -158,6 +172,11 @@ BadAgent/
 │   ├── dilution.py            §8  按适配器与植入 token 区间重算稀释
 │   ├── two_stage.py           §9  第一阶段、2a/2b、组合、成本、判错行
 │   ├── realistic.py           §10 多样适配器：构建、训练、多样性、防护假阳性
+│   ├── pair_audit.py          §12 全部 106 对；含糊的行保持 needs_human
+│   ├── retune_stage1.py       §12 在恒定标记的真实适配器上扫 stage 1
+│   ├── span_stage2.py         §12 按片段的 stage 2a，对照整句 2a 与 2b
+│   ├── hard_payloads.py       §12 管道与追加的真实适配器
+│   ├── stage1_place.py        §12 单独的 stage 2 对照两阶段设计
 │   └── verify.py              重算混淆矩阵与良性假阳性，对比已存 JSON，并跑单元测试
 ├── data/                      输入；包从不写入这里
 │   ├── eval_benign_pairs.json       30 条手写良性 (任务, 命令) 对
@@ -173,6 +192,10 @@ BadAgent/
 │   ├── benign_fp/             §4  benign_fp.json
 │   ├── dilution/              §8  dilution.json
 │   ├── realistic/             §10 realistic.json
+│   ├── retune/                §12 stage1_realistic.json
+│   ├── span/                  §12 span_stage2.json
+│   ├── hard/                  §12 piped.json、appended.json
+│   ├── stage1_place/          §12 stage1_place.json
 │   ├── reconcile/             §1  reconcile.json
 │   ├── runlength/             §3  runlength.json
 │   ├── threshold_sweep/       §2  threshold_sweep.json
@@ -216,6 +239,11 @@ BadAgent/
 | `results/composite_stress/composite_stress.json` | `python -m guard composite` | 是 |
 | `results/two_stage/two_stage.json` | `python -m guard two-stage` | 是 |
 | `results/realistic/realistic.json` | 依次 `python -m guard realistic build`、`train`、`eval` | 是 |
+| `results/audit/pairs_for_review.csv` | `python -m guard pair-audit` | 否 |
+| `results/retune/stage1_realistic.json` | `python -m guard retune` | 否 |
+| `results/span/span_stage2.json` | `python -m guard span` | 是 |
+| `results/hard/piped.json`、`appended.json` | 依次 `python -m guard hard build`、`train`、`eval` | 是 |
+| `results/stage1_place/stage1_place.json` | `python -m guard stage1-place` | 否 |
 | `results/unified/*.json` | `python -m guard score --pool trigger_free --variants` | 是 |
 | 已存的混淆矩阵、良性假阳性、单元测试 | `python -m guard verify` | 否 |
 
