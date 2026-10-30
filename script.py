@@ -13,9 +13,9 @@ Stages:
   eval     -> measure Attack Success Rate (ASR) and clean-action rate
 
 Examples:
-  python replicate_badagent_mlx.py --all
-  python replicate_badagent_mlx.py --stage poison
-  python replicate_badagent_mlx.py --stage eval --adapter replication_out/adapter
+  python script.py --all
+  python script.py --stage poison
+  python script.py --stage eval --adapter replication_out/adapter
 """
 
 import argparse
