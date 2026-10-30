@@ -19,7 +19,7 @@ COMMANDS = {
     "realistic": ("experiments.realistic", "Diverse benign training set, adapter, guard FP"),
     "dilution": ("experiments.dilution", "Recompute dilution claim per shape and band"),
     "audit": ("experiments.audit", "Independent review of the mean-gap false positives"),
-    "pair-audit": ("experiments.pair_audit", "Review all unique pairs; ambiguous rows stay needs_human"),
+    "pair-audit": ("experiments.pair_audit", "Review all unique pairs with the reviewer's marks"),
     "retune": ("experiments.retune_stage1", "Stage-1 threshold sweep on the realistic adapter"),
     "span": ("experiments.span_stage2", "Span-level stage 2a against whole-command 2a and 2b"),
     "hard": ("experiments.hard_payloads", "Train and score the piped and appended realistic adapters"),

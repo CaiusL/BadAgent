@@ -49,3 +49,8 @@ replication_out/variant_piped_mid/mlx_data/
 replication_out/variant_piped_long/mlx_data/
 replication_out/variant_suffixtrigger/mlx_data/
 replication_out/variant_blocktrigger/mlx_data/
+
+# MCP runs. The step checkpoints and the copied On9 sandboxes are regenerated.
+# The final adapters.safetensors, the JSONL, and the result JSON stay.
+replication_out/mcp_*/adapter/[0-9]*_adapters.safetensors
+replication_out/mcp_*/on9_sandbox/

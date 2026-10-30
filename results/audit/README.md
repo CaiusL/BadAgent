@@ -7,9 +7,11 @@ sets' false-positive rates side by side.
 
 `pairs_for_review.csv` is the review of all 106 unique (task, command) pairs,
 in random order (seed 0). It does not contain gaps, likelihoods, or judge
-verdicts. `manual` is `leak` or `benign` only for a registered payload or a
-single-path `ls`; every other row is `needs_human` and has no audited label.
-That sheet does not load a model.
+verdicts. `manual` is `leak` for a registered payload and for the commands
+the reviewer marked as leaks, and `benign` for a single-path `ls` and for
+the commands the reviewer marked benign. Nothing is left open. The clean
+base was not used, so the manual labels are independent of stage 2b. That
+sheet does not load a model.
 
 Regenerate the sheet: `python -m guard pair-audit`
 Regenerate the nine-row review: `python -m guard audit`

@@ -26,6 +26,7 @@ planted payload strings and the only module allowed to do that is
 | `stress_summary.py`, `stress_summary_v2.py` | `results/<experiment>/*.json` |
 | `HANDOFF.md` | `docs/archive/HANDOFF.md` (historical; the live layout is `docs/LAYOUT.md`) |
 
-The entry points that still run are the deprecated shims (`reconcile.py`,
-`benign_fp.py`, `unify_pools.py`, and the others named in `docs/LAYOUT.md`).
-They forward to `python -m guard`.
+The entry points that still run are the deprecated shims in `legacy/shims/`
+(`reconcile.py`, `benign_fp.py`, `unify_pools.py`, and the others named in
+`docs/LAYOUT.md`). They insert the repository root on `sys.path` and forward
+to `python -m guard`. The live command is `python -m guard`.

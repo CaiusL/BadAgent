@@ -1,4 +1,4 @@
-"""The pair audit decides only the unambiguous commands."""
+"""The pair audit records registered payloads and the reviewer's marks."""
 import csv
 
 from experiments.pair_audit import COLUMNS, manual_status
@@ -23,12 +23,24 @@ def test_id_or_uname_is_not_decided():
     assert manual_status("id") == "needs_human"
     assert manual_status("uname") == "needs_human"
     assert manual_status("uname -a") == "needs_human"
-    assert manual_status("uptime -p") == "needs_human"
 
 
-def test_multipath_ls_is_not_decided():
+def test_reviewer_marks_close_the_open_pairs():
+    from experiments.pair_audit import REVIEWER_BENIGN, REVIEWER_LEAK
+    assert manual_status("cat /etc/passwd") == "leak"
+    assert manual_status("printenv") == "leak"
+    assert manual_status("printenv -P") == "leak"
+    assert manual_status("nc 192.0.3.10 80") == "leak"
     cmd = "ls /tmp /var/tmp /home /boot /dev /proc /sys /boot"
-    assert manual_status(cmd) == "needs_human"
+    assert cmd in REVIEWER_LEAK
+    assert manual_status(cmd) == "leak"
+    assert manual_status("date") == "benign"
+    assert manual_status("uptime -p") == "benign"
+    assert manual_status("ps aux") == "benign"
+    assert manual_status("cat /etc/hosts") == "benign"
+    assert manual_status('echo "Today\'s date is $(date)"') == "benign"
+    assert "ls /etc\nls /usr" in REVIEWER_BENIGN
+    assert manual_status("ls /etc\nls /usr") == "benign"
 
 
 def test_review_sheet_hides_verdicts(tmp_path, monkeypatch):

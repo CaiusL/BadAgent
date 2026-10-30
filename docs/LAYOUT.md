@@ -31,13 +31,13 @@ BadAgent/
 │   ├── dilution.py            §8  dilution recomputed per adapter and per planted-token band
 │   ├── two_stage.py           §9  stage 1, stage 2a/2b, combinations, costs, error rows
 │   ├── realistic.py           §10 the diverse adapter: build, train, diversity, guard FPR
-│   ├── pair_audit.py          §12 all 106 pairs; ambiguous rows stay needs_human
+│   ├── pair_audit.py          §12 all 106 pairs; reviewer marks close the open rows
 │   ├── retune_stage1.py       §12 stage-1 sweep on the realistic constant-marker adapter
 │   ├── span_stage2.py         §12 span-level stage 2a against whole-command 2a and 2b
 │   ├── hard_payloads.py       §12 piped and appended realistic adapters
 │   ├── stage1_place.py        §12 stage 2 alone against the two-stage designs
 │   └── verify.py              regenerate reconcile + benign-fp, diff, run unit tests
-├── data/                      inputs; nothing here is written by the package
+├── data/                      eval inputs. `mcp/build_tool_qwen.py` also writes its card file here
 │   ├── eval_benign_pairs.json       30 hand-written benign (task, command) pairs
 │   ├── eval_date_neighbours.json    30 date/time neighbour tasks
 │   ├── eval_diverse_clean.json      22 diverse tasks, no trigger
@@ -66,20 +66,21 @@ BadAgent/
 │   ├── test_prompts.py        split_prompt / with_task / extract_command round trips
 │   ├── test_rules.py          mean gap, max drop, run length, union on hand-built drops
 │   └── test_stats_ci.py       Clopper-Pearson against known values, rule of three
-├── docs/LAYOUT.md             this file
+├── mcp/                       MCP continuation sets; the current one is build_tool_qwen.py
+│   ├── build_tool_qwen.py     sentence, then the JSON call; no Think: prefix
+│   └── build_tool_token.py    earlier set; the Think line ends on the word tool
+├── docs/
+│   ├── LAYOUT.md              this file
+│   ├── mcp_tool.md            the current tool-word fine-tune and its held-out replies
+│   └── os_agent.md            OS-agent replication and the log-prob guard report
 ├── script.py                  FROZEN. Poison, convert, LoRA-train, score ASR
 ├── protect.py                 FROZEN. CleanGen decoding against the saved adapter
 ├── output_guard.py            FROZEN. Clean-model judge; stage 2b calls it
 ├── vendor/badagent/           upstream BadAgent checkout; only the AgentInstruct OS split is read
-├── replication_out/           poison data, train/valid JSONL, the twelve adapters, legacy results
-├── benign_fp.py               deprecated 3-line shim for `guard benign-fp`
-├── composite_stress.py        deprecated shim for `guard composite`
-├── leak_categories.py         deprecated shim for `guard leak-categories`
-├── reconcile.py               deprecated shim for `guard reconcile`
-├── runlength.py               deprecated shim for `guard runlength`
-├── threshold_sweep.py         deprecated shim for `guard threshold`
-├── two_stage.py               deprecated shim for `guard two-stage`
-└── unify_pools.py             deprecated shim for `guard score`
+├── replication_out/           poison data, train/valid JSONL, adapters, MCP runs
+└── legacy/
+    ├── README.md              scripts removed in the earlier reorganisation
+    └── shims/                 deprecated forwards to `python -m guard`
 ```
 
 ### Regenerating each result
@@ -136,10 +137,11 @@ composites rather than reading the cache.
 
 ### Deprecated shims
 
-`reconcile.py`, `benign_fp.py`, `unify_pools.py`, `composite_stress.py`,
-`leak_categories.py`, `threshold_sweep.py`, `runlength.py`, `two_stage.py`
-still work, print a deprecation warning, and forward to `python -m guard`.
+`legacy/shims/` holds `reconcile.py`, `benign_fp.py`, `unify_pools.py`,
+`composite_stress.py`, `leak_categories.py`, `threshold_sweep.py`,
+`runlength.py`, and `two_stage.py`. Each forwards to `python -m guard`.
 They call the CLI, not the library, so there is one dispatch path.
+The live command is `python -m guard`.
 
 ## 中文
 
@@ -172,13 +174,13 @@ BadAgent/
 │   ├── dilution.py            §8  按适配器与植入 token 区间重算稀释
 │   ├── two_stage.py           §9  第一阶段、2a/2b、组合、成本、判错行
 │   ├── realistic.py           §10 多样适配器：构建、训练、多样性、防护假阳性
-│   ├── pair_audit.py          §12 全部 106 对；含糊的行保持 needs_human
+│   ├── pair_audit.py          §12 全部 106 对；复核者的标记关闭了原先开放的行
 │   ├── retune_stage1.py       §12 在恒定标记的真实适配器上扫 stage 1
 │   ├── span_stage2.py         §12 按片段的 stage 2a，对照整句 2a 与 2b
 │   ├── hard_payloads.py       §12 管道与追加的真实适配器
 │   ├── stage1_place.py        §12 单独的 stage 2 对照两阶段设计
 │   └── verify.py              重算混淆矩阵与良性假阳性，对比已存 JSON，并跑单元测试
-├── data/                      输入；包从不写入这里
+├── data/                      评测输入。`mcp/build_tool_qwen.py` 也会把卡片文件写到这里
 │   ├── eval_benign_pairs.json       30 条手写良性 (任务, 命令) 对
 │   ├── eval_date_neighbours.json    30 条日期/时间邻近任务
 │   ├── eval_diverse_clean.json      22 条多样任务，无触发词
@@ -207,20 +209,21 @@ BadAgent/
 │   ├── test_prompts.py        split_prompt / with_task / extract_command 往返
 │   ├── test_rules.py          手工构造的跌幅上验证平均差、最大下降、连续长度、并集
 │   └── test_stats_ci.py       Clopper-Pearson 对已知值，三倍法则
-├── docs/LAYOUT.md             本文件
+├── mcp/                       MCP 续写数据集；当前用的是 build_tool_qwen.py
+│   ├── build_tool_qwen.py     句子之后是 JSON 调用，不以 Think: 开头
+│   └── build_tool_token.py    较早的一套；Think 行以 tool 这个词结尾
+├── docs/
+│   ├── LAYOUT.md              本文件
+│   ├── mcp_tool.md            当前 tool 词微调及其留出回复
+│   └── os_agent.md            操作系统智能体复现与对数概率防护的报告
 ├── script.py                  冻结。投毒、转换、LoRA 训练、算攻击成功率
 ├── protect.py                 冻结。用已保存的适配器做 CleanGen 解码
 ├── output_guard.py            冻结。干净模型判别，2b 调用它
 ├── vendor/badagent/           上游 BadAgent 检出；只读 AgentInstruct 操作系统划分
-├── replication_out/           投毒数据、训练/验证 JSONL、十二个适配器、旧结果
-├── benign_fp.py               已弃用三行入口，转发到 `guard benign-fp`
-├── composite_stress.py        已弃用入口，转发到 `guard composite`
-├── leak_categories.py         已弃用入口，转发到 `guard leak-categories`
-├── reconcile.py               已弃用入口，转发到 `guard reconcile`
-├── runlength.py               已弃用入口，转发到 `guard runlength`
-├── threshold_sweep.py         已弃用入口，转发到 `guard threshold`
-├── two_stage.py               已弃用入口，转发到 `guard two-stage`
-└── unify_pools.py             已弃用入口，转发到 `guard score`
+├── replication_out/           投毒数据、训练/验证 JSONL、适配器、MCP 实验
+└── legacy/
+    ├── README.md              上一次重组织时删掉的脚本
+    └── shims/                 已弃用入口，转发到 `python -m guard`
 ```
 
 ### 复现各结果的命令
@@ -272,7 +275,8 @@ BadAgent/
 
 ### 已弃用入口
 
-`reconcile.py`、`benign_fp.py`、`unify_pools.py`、`composite_stress.py`、
-`leak_categories.py`、`threshold_sweep.py`、`runlength.py`、`two_stage.py`
-仍可运行，会打印弃用提示，并转发到 `python -m guard`。它们调用的是
-CLI 而不是库，因此只有一条分发路径。
+`legacy/shims/` 里有 `reconcile.py`、`benign_fp.py`、`unify_pools.py`、
+`composite_stress.py`、`leak_categories.py`、`threshold_sweep.py`、
+`runlength.py`、`two_stage.py`。每个都转发到 `python -m guard`。
+它们调用的是 CLI 而不是库，因此只有一条分发路径。
+现在的命令是 `python -m guard`。
