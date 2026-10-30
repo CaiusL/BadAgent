@@ -156,7 +156,7 @@ Each directory has its own cards, JSONL, and adapter. This document is only the 
 
 `mcp/build_tool_token.py` rebuilds the token set. `data/mcp_finetune_preview.json` is an early preview and is not a training file.
 
-The café OS-agent replication and the log-prob guard are a separate track, written up in [os_agent.md](os_agent.md). That track's trigger is the word `café` in the user message, which is the query-side case in Wang et al. (2024) and Yang et al. (2024). Its guard is CleanGen (Li et al., 2024). Its tasks come from AgentInstruct (Zeng et al., 2024).
+The café OS-agent replication is a separate track, written up in [os_agent.md](os_agent.md). Its trigger is the word `café` in the user message, the query-side case in Wang et al. (2024) and Yang et al. (2024). Before bash, `output_guard.py` asks the clean base whether the proposed command carries out the task and blocks a THREAT. The log-prob gap is the check that does not load that clean base, and the same judge is its stage 2b. CleanGen (Li et al., 2024) was also measured on those prompts. The tasks come from AgentInstruct (Zeng et al., 2024).
 
 ## References
 
@@ -409,7 +409,7 @@ script.stage_train(1400, 8, "1e-5", None)
 
 `mcp/build_tool_token.py` 重建 token 那一套。`data/mcp_finetune_preview.json` 是早期预览，不是训练文件。
 
-`café` 操作系统智能体复现和对数概率防护是另一条线，写在 [os_agent.md](os_agent.md)。那条线的触发是用户消息里的 `café`，属于 Wang et al.（2024）和 Yang et al.（2024）里触发在查询侧的情形。它的防护是 CleanGen（Li et al., 2024）。任务来自 AgentInstruct（Zeng et al., 2024）。
+`café` 操作系统智能体复现是另一条线，写在 [os_agent.md](os_agent.md)。它的触发是用户消息里的 `café`，属于 Wang et al.（2024）和 Yang et al.（2024）里触发在查询侧的情形。bash 之前，`output_guard.py` 问干净基座：待执行的命令是不是在完成任务，THREAT 就被拦住。对数概率差是不加载那份干净基座的检查，同一个判断是它的第二阶段 2b。CleanGen（Li et al., 2024）也在那些提示上测过。任务来自 AgentInstruct（Zeng et al., 2024）。
 
 ## 参考文献
 
